@@ -78,14 +78,6 @@
 	font-family: "Manrope";
 	src: url(../../assets/fonts/Manrope-Variable.ttf);
 }
-@font-face {
-	font-family: "BeVietnam";
-	src: url(../../assets/fonts/BeVietnamPro-Variable.ttf);
-}
-@font-face {
-	font-family: "FiraSans";
-	src: url(../../assets/fonts/FiraSans-Variable.ttf);
-}
 
 * {
 	font-family: "Supreme", sans-serif;
