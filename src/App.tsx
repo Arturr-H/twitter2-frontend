@@ -51,6 +51,13 @@ export default class App extends React.PureComponent<Props, State> {
 		return (
 			<>
 				<Router>
+                    <Routes>
+						<Route path="/login" element={<Login />} />
+						<Route path="/sign-up" element={<SignUp />} />
+						<Route path="/register" element={<Register />} />
+                        <Route path="/user/:handle" element={<ProfileScene />} />
+					</Routes>
+                    
                     <Home compose={this.compose}>
                         <Routes>
 						    <Route index path="/" element={this.authNeeded(<Feed
@@ -64,12 +71,6 @@ export default class App extends React.PureComponent<Props, State> {
                             <Route path="/post/:id" element={<PostScene />} />
                         </Routes>
                     </Home>
-					<Routes>
-						<Route path="/login" element={<Login />} />
-						<Route path="/sign-up" element={<SignUp />} />
-						<Route path="/register" element={<Register />} />
-                        <Route path="/user/:handle" element={<ProfileScene />} />
-					</Routes>
 
                     {/* Composing overlay */}
                     {this.state.compose !== null ? <div className="publish-post-overlay">
