@@ -1,50 +1,19 @@
-# React + TypeScript + Vite
+# Twitter2
+I started making a clone of twitter (X) recently, because I really didn't like the way the real twitter is heading. It's just about american right wing politics. I would like to create a non-biased media platform, where all accounts have the same requirements for gaining engagement and views. 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### How?
+This repo is just the frontend. It's written in `React` using the help of `Typescript` and `Vite`, and is connected to the backend written in Rust using `actix_web`.
 
-Currently, two official plugins are available:
+### What's the difference between this and x.com?
+My goal is not to create something extremely unique just for the sake of it, I want to mimic the feel of the maybe-not-anymore beloved X.com, but whilst still having some new features, like quoting (Referencing a specific part of another post as seen in the "Quote" image below).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Sign up | Homepage
+:--:|:--:
+![Sign up](./.github/screenshots/sign-up.jpg) | ![Homepage](./.github/screenshots/home.jpg)
 
-## Expanding the ESLint configuration
+Reply | Quote
+:--:|:--:
+![Reply](./.github/screenshots/reply.jpg) | ![Quote](./.github/screenshots/quote.jpg)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Contributions
+Contributions are welcome, and If you'd like to make any huge changes, please open an Issue first. But making a pull request will always work!
