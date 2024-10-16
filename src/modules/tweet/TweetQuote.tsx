@@ -3,10 +3,10 @@ import { PostCitation } from "./TweetTypes";
 import { Trash2 } from "lucide-react";
 
 interface Props {
-    /** The displayname of the person who
-     * wrote said thing, not the person
-     * who is quoting that person */
-    author: string,
+    /** The displayname and handle stored
+     * in PostCitation are referencing the
+     * person who wrote said thing, not the
+     * person who is quoting that person */
     citation: PostCitation,
 
     removeQuote?: () => void
@@ -61,7 +61,7 @@ export class TweetQuote extends React.PureComponent<Props> {
         return (
             <div className="post-quote-container">
                 <div className="profile-image"></div>
-                <span className="text name">{this.props.author}:&nbsp;&nbsp;</span>
+                <span className="text name">{this.props.citation.displayname}:&nbsp;&nbsp;</span>
                 {this.generateContentSlice(this.props.citation)}
 
                 {this.props.removeQuote && <button

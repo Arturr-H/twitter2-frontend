@@ -107,7 +107,7 @@ export class Tweet extends React.PureComponent<Props, State> {
                     <TweetHeader
                         displayname={this.props.post_with_user?.user.displayname ?? null}
                         handle={this.props.post_with_user?.user.handle ?? null}
-                        user_id={this.props.post_with_user?.user.user_id ?? null}
+                        user_id={this.props.post_with_user?.post.poster_id ?? null}
                     />
 
                     {/* Citation of another post if exists */}
@@ -121,7 +121,6 @@ export class Tweet extends React.PureComponent<Props, State> {
                         >
                             <TweetQuote
                                 citation={this.props.post_with_user.post.citation}
-                                author={this.props.post_with_user.user.displayname}
                             />
                         </Link>}
 

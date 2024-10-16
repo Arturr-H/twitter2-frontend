@@ -6,16 +6,20 @@ export interface Post {
     poster_id: number,
     replies_to: number | null,
 
-    citation: PostCitation | null
-}
-export interface PostUserInfo {
-    user_id: number,
-    handle: string,
-    displayname: string
+    citation: PostCitation | null,
 }
 export interface PostWithUser {
     post: Post,
-    user: PostUserInfo,
+    user: UserInfo,
+    // metadata: PostMetadata,
+    liked: boolean,
+    bookmarked: boolean,
+}
+export interface UserInfo {
+    handle: string,
+    displayname: string
+}
+export interface PostMetadata {
     /** If the user which is viewing
      * the post has it liked */
     liked: boolean,

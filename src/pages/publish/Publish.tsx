@@ -178,7 +178,7 @@ export class Publish extends React.PureComponent<Props, State> {
             post_id: this.state.reply_to_post.post.id,
             displayname: this.state.reply_to_post.user.displayname,
             handle: this.state.reply_to_post.user.handle,
-            user_id: this.state.reply_to_post.user.user_id,
+            user_id: this.state.reply_to_post.post.poster_id,
         }
     }
 
@@ -233,14 +233,13 @@ export class Publish extends React.PureComponent<Props, State> {
 
                         <div className="body">
                             <TweetHeader
-                                displayname={null}
-                                handle={null}
-                                user_id={null}
+                                displayname={this.state.reply_to_post.user.displayname}
+                                handle={this.state.reply_to_post.user.handle}
+                                user_id={this.state.reply_to_post.post.poster_id}
                             />
 
                             {this.state.reply_to_post.post.citation && <TweetQuote
                                 citation={this.state.reply_to_post.post.citation}
-                                author={"Todo"}
                             />}
 
                             <div className="content-container quote-highlight">
@@ -275,7 +274,6 @@ export class Publish extends React.PureComponent<Props, State> {
                             {/* The quote (if we have selected one) */}
                             {this.state.quote && <TweetQuote
                                 removeQuote={this.removeQuote}
-                                author={this.state.reply_to_post?.user.displayname ?? "Unknown"}
                                 citation={this.state.quote}
                             />}
 
