@@ -1,0 +1,7 @@
+.header-tweet-container {
+    box-sizing: border-box;
+    padding: 0.5rem;
+
+    border-bottom: 0.1rem solid var(--border);
+    background: var(--primary-foreground);
+}

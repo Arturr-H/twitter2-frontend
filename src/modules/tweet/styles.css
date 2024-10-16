@@ -1,0 +1,137 @@
+.tweet {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}.tweet > .sidebar {
+    width: 3rem;
+    height: 100%;
+
+    padding: 0.3rem;
+    box-sizing: border-box;
+}.tweet > .sidebar > .profile-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    background: white;
+}.tweet > .body {
+    width: 100%;
+    height: 100%;
+
+    padding: 0.5rem;
+    padding-top: 0rem;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}.tweet > .body > .header {
+    width: 100%;
+}.tweet > .body > .header > .header-link {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    text-decoration: none;
+}.tweet > .body > .header .displayname {
+    font-size: 20px;
+    font-weight: 500;
+}.tweet > .body > .header .handle {
+    color: #aaa;
+    font-size: 20px;
+    font-weight: 400;
+}.tweet > .body > .content-container {
+    padding: 0;
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--foreground);
+}.tweet > .body > .content-container > span, .tweet > .body > .content-container > a {
+    padding: 0;
+    margin: 0;
+
+    font-size: 18px;
+    font-weight: 400;
+    
+    text-decoration: none;
+    font-family: "Manrope";
+}.tweet > .body > .content-container > span.default-text {
+    color: #ccc;
+    font-family: "Manrope";
+}.tweet > .body > .content-container > a.hashtag {
+    color: var(--hashtag-color);
+}.tweet > .body > .content-container > a.mention {
+    color: var(--mention-color);
+}.tweet > .body > .content-container > a:hover {
+    filter: brightness(90%);
+}.tweet > .body > .action-bar {
+    display: flex;
+    flex-direction: row;
+
+    margin-top: 0.5rem;
+    gap: 0.75rem;
+}.tweet > .body > .action-bar > .item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 0.25rem;
+    cursor: pointer;
+
+    background: none;
+    border: none;
+}.tweet > .body > .action-bar > .item:hover * {
+    filter: brightness(120%);
+}.tweet > .body > .action-bar > .item:active * {
+    filter: brightness(110%);
+}.tweet > .body > .action-bar > .item > .count {
+    font-size: 16px;
+    color: #ccc;
+
+    user-select: none;
+}
+
+/* Post citation */
+.post-quote-container {
+    width: 100%;
+    background: var(--popover);
+    border-left: 0.2rem solid var(--chart-1-highlight);
+    box-sizing: border-box;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    border-radius: 0 0.25rem 0.25rem 0;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}.post-quote-container > span {
+    padding: 0;
+    margin: 0;
+
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--foreground);
+    
+    text-decoration: none;
+    font-family: "Manrope";
+}.post-quote-container > span.text.name {
+    font-family: "Epiogue", sans-serif;
+    font-weight: 500;
+}.post-quote-container > span.text-important {
+    font-weight: 600;
+}.post-quote-container > span.text-unimportant {
+    color: #666;
+}.post-quote-container > span.text-unimportant.ellipsis {
+    user-select: none;
+    pointer-events: none;
+}.post-quote-container > .profile-image {
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    background: white;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+

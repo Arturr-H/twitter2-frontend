@@ -1,0 +1,185 @@
+.publish-page {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+}.publish-page > .row-space.publish > .close-button {
+    border: 0.1rem solid var(--border);
+    background: var(--primary-foreground);
+
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    height: 1.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.05s ease-in-out;
+}.publish-page > .row-space.publish > .close-button:hover {
+    background: var(--border);
+}
+
+.publish-page>.publish-container {
+    width: min(70vh, 70vw);
+    min-height: min(50vh, 50vw);
+    background: var(--primary-foreground);
+    border: 0.1rem solid var(--border);
+    border-radius: 1rem;
+
+    box-sizing: border-box;
+    padding: 0.5rem;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.row-space.publish {
+    width: min(70vh, 70vw);
+    margin-bottom: 0.5rem;
+}
+
+.publish-tweet {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.publish-tweet>.sidebar {
+    width: 3rem;
+    height: 100%;
+
+    padding: 0.3rem;
+    box-sizing: border-box;
+}
+
+.publish-tweet>.sidebar>.profile-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    background: white;
+}
+
+.publish-tweet>.body {
+    width: 100%;
+    height: 100%;
+
+    padding: 0.5rem;
+    padding-top: 0rem;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.publish-tweet>.body>.header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.publish-tweet>.body>.header>.displayname {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.publish-tweet>.body>.header>.handle {
+    color: #aaa;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.publish-tweet>.body>textarea {
+    color: var(--foreground);
+    background: none;
+    border: none;
+    resize: none;
+    padding: 0;
+    margin: 0;
+
+    flex: 1;
+    font-size: 18px;
+    font-family: "Manrope", sans-serif;
+
+    width: 100%;
+}
+
+.publish-tweet>.body>textarea:focus {
+    outline: none;
+}
+
+.post-reply-container {
+    background: var(--primary-foreground);
+    border: 0.1rem solid var(--border);
+    border-radius: 1rem;
+    width: min(70vh, 70vw);
+    margin-bottom: 1rem;
+
+    box-sizing: border-box;
+    padding: 0.5rem;
+
+    display: flex;
+    flex-direction: column;
+}.post-reply-container button.quote-button {
+    background: var(--chart-1);
+    border: 0.1rem solid var(--chart-1-highlight);
+    outline: none;
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    cursor: pointer;
+    border-radius: 0.5rem;
+}.post-reply-container button.quote-button:hover {
+    background: var(--chart-1-highlight);
+}.post-reply-container button.quote-button.disabled {
+    background: var(--border);
+    border: 0.1rem solid var(--border-highlight);
+}.post-reply-container button.quote-button.disabled:hover {
+    background: var(--border-highlight);
+}
+
+.post-reply-container .quote-highlight span::selection,
+.post-reply-container .quote-highlight a::selection {
+    background: yellow !important;
+    color: #000 !important;
+}
+
+button.quote-button.disable {
+    outline: none;
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    cursor: pointer;
+    border-radius: 50%;
+    background: var(--chart-5);
+    border: 0.1rem solid var(--chart-5-highlight);
+
+    position: absolute;
+    top: -0.75rem;
+    right: -0.75rem;
+}button.quote-button.disable:hover {
+    background: var(--chart-5-highlight);
+}
+
+.quoting-background {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px) brightness(60%);
+    
+    position: absolute;
+    z-index: 49;
+}

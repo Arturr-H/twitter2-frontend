@@ -1,0 +1,75 @@
+.button {
+    background: var(--background);
+    color: var(--foreground);
+    border: var(--border) 0.1rem solid;
+    
+    padding: 0.5rem 1rem;
+    outline: none;
+    border-radius: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    cursor: pointer;
+    transition: color 0.05s ease-in-out, background 0.05s ease-in-out, border 0.05s ease-in-out;
+
+    height: 2.5rem;
+    font-family: "Epilogue";
+}.button:hover {
+    background: var(--foreground);
+    border: var(--foreground) 0.1rem solid;
+    color: var(--background);
+}.button:focus {
+    border: var(--foreground) 0.1rem solid !important;
+}.button.primary {
+    background: var(--chart-1);
+    border: var(--chart-1-highlight) 0.1rem solid;
+}.button.primary:hover {
+    background: var(--chart-1-highlight);
+    border: var(--chart-1-highlight) 0.1rem solid;
+    color: var(--foreground);
+}.button.expand {
+    width: 100%;
+}
+
+.button > .loading-icon {
+    animation: loading-icon 1s linear infinite;
+}
+
+@keyframes loading-icon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.navbutton {
+    background: var(--background);
+    color: var(--foreground);
+    border: none;
+    
+    padding: 0 0.75rem;
+    outline: none;
+    border-radius: 0.25rem;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    cursor: pointer;
+    transition: color 0.05s ease-in-out, background 0.05s ease-in-out, border 0.05s ease-in-out;
+
+    height: 2.25rem;
+    font-family: "Epilogue";
+    font-size: 16px;
+
+    text-align: left;
+}.navbutton:hover {
+    background: var(--accent);
+}.navbutton.primary {
+    background: var(--primary-foreground);
+    border: var(--border) 0.1rem solid;
+}.navbutton.primary:hover {
+    background: var(--chart-1-highlight);
+    border: var(--chart-1-highlight) 0.1rem solid;
+    color: var(--foreground);
+}

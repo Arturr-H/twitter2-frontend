@@ -1,0 +1,17 @@
+.register-info {
+    font-size: 20px;
+    color: #999;
+    font-weight: 300;
+    font-family: "Epulogue" !important;
+}.register-info a {
+    font-weight: 300;
+    color: var(--chart-1);
+    font-family: "Epulogue" !important;
+    font-weight: 400;
+}
+
+.register-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}

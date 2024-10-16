@@ -1,0 +1,65 @@
+.input-wrapper {
+    background: var(--background);
+    border: var(--border) 0.1rem solid;
+
+    outline: none;
+    border-radius: 0.5rem;
+
+    transition: color 0.05s ease-in-out, background 0.05s ease-in-out;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 2.5rem;
+}.input-wrapper:hover {
+    border: var(--border-highlight) 0.1rem solid;
+}.input-wrapper:focus-within {
+    border: var(--chart-1) 0.1rem solid;
+}.input-wrapper.error {
+    animation: input-error-animation 1s cubic-bezier(.53,.1,.94,.17) forwards;
+}
+
+.input-wrapper > .input {
+    outline: none;
+    border: none;
+    background: none;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+    color: var(--foreground);
+    border-radius: 0.4rem;
+    font-family: "Epilogue";
+}.input-wrapper > .input.no-right-padding {
+    padding-right: 0;
+}
+
+.input-wrapper.expand {
+    width: 100%;
+}.input-wrapper.expand > input {
+    width: 100%;
+}
+
+.input-wrapper > .eye-icon-wrapper {
+    height: 90%;
+    margin-right: 0.125rem;
+    aspect-ratio: 1;
+
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}.input-wrapper > .eye-icon-wrapper:hover {
+    filter: brightness(150%);
+}.input-wrapper > .eye-icon-wrapper:focus {
+    /* background: var(--secondary); */
+    border: 0.1rem solid var(--border);
+    border-radius: 0.35rem;
+}
+
+@keyframes input-error-animation {
+    from { border: 0.1rem solid red; }
+    to { border: 0.1rem solid var(--border); }
+}
