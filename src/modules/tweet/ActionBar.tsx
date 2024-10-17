@@ -18,10 +18,16 @@ const LIKED_COLOR = "hsl(340, 75%, 55%)";
 const BOOKMARKED_COLOR = "hsl(60, 75%, 55%)";
 
 export class ActionBar extends React.PureComponent<Props, State> {
+
+    onClick(e: React.MouseEvent, func: () => void): void {
+        e.stopPropagation();
+        func();
+    }
+
     render(): React.ReactNode {
         return (
             <div className="action-bar">
-                <div className="item" onClick={this.props.toggleLike}>
+                <div className="item" onClick={(e) => this.onClick(e, this.props.toggleLike)}>
                     <Heart
                         color={this.props.liked ? LIKED_COLOR : "#ccc"}
                         fill={this.props.liked ? LIKED_COLOR : "none"}
@@ -47,14 +53,14 @@ export class ActionBar extends React.PureComponent<Props, State> {
                 <button className="item" title="Share">
                     <Share color="#ccc" size={20} />
                 </button>
-                <button className="item" title="Save to bookmarks" onClick={this.props.toggleBookmark}>
+                <button className="item" title="Save to bookmarks" onClick={(e) => this.onClick(e, this.props.toggleBookmark)}>
                     <Bookmark
                         color={this.props.bookmarked ? BOOKMARKED_COLOR : "#ccc"}
                         fill={this.props.bookmarked ? BOOKMARKED_COLOR : "none"}
                         size={20}
                     />
                 </button>
-                <button className="item" title="Reply" onClick={this.props.reply}>
+                <button className="item" title="Reply" onClick={(e) => this.onClick(e, this.props.reply)}>
                     <Reply color="#ccc" size={20} />
                 </button>
                 <button className="item" title="More">

@@ -10,6 +10,7 @@ import { Profile } from "./pages/profile/Profile";
 import { Feed } from "./modules/feed/Feed";
 import { Publish } from "./pages/publish/Publish";
 import { Post } from "./pages/post/Post";
+import { Bookmarks } from "./pages/bookmarks/Bookmarks";
 
 /* Interfaces */
 interface Props {}
@@ -57,7 +58,7 @@ export default class App extends React.PureComponent<Props, State> {
 						<Route path="/register" element={<Register />} />
                         <Route path="/user/:handle" element={<ProfileScene />} />
 					</Routes>
-                    
+
                     <Home compose={this.compose}>
                         <Routes>
 						    <Route index path="/" element={this.authNeeded(<Feed
@@ -68,6 +69,7 @@ export default class App extends React.PureComponent<Props, State> {
 						    <Route path="/hashtag/:hashtag" element={<HashtagScene
                                 compose={this.compose}
                             />} />
+						    <Route path="/bookmarks" element={<Bookmarks />} />
                             <Route path="/post/:id" element={<PostScene />} />
                         </Routes>
                     </Home>

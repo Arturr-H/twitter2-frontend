@@ -2,6 +2,8 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+
+    text-decoration: none;
 }.tweet > .sidebar {
     width: 3rem;
     height: 100%;

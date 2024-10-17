@@ -2,6 +2,7 @@
 import React from "react";
 import "./styles.css";
 import { LoaderCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 /* Interfaces */
 interface Props {
@@ -12,7 +13,8 @@ interface Props {
     primary?: true,
     expand?: true,
 
-    icon?: JSX.Element
+    icon?: JSX.Element,
+    to?: string,
 }
 interface State {
     loading: boolean
@@ -59,18 +61,31 @@ export class NavButton extends React.PureComponent<Props, State> {
     }
 
     render(): React.ReactNode {
+        let inner = <>
+            {this.props.icon && this.props.icon}
+            {this.state.loading
+                ? <LoaderCircle className="loading-icon" size={24} />
+                : this.props.text}
+        </>;
+
         return (
-            <button
+            this.props.to !== undefined
+            ? <Link
+                to={this.props.to}
+                style={{ textDecoration: "none" }}
+                className="navbutton"
+            >
+                {inner}
+            </Link>
+            
+            : <button
                 onClick={this.onClick}
                 className={`navbutton
                     ${this.props.primary && "primary"}
                     ${this.props.expand && "expand"}
                 `}
             >
-                {this.props.icon && this.props.icon}
-                {this.state.loading
-                    ? <LoaderCircle className="loading-icon" size={24} />
-                    : this.props.text}
+                {inner}
             </button>
         );
     }

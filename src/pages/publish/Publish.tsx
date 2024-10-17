@@ -6,7 +6,7 @@ import { Button } from "../../components/button/Button";
 import { Check, PaintbrushIcon, Quote, Reply, X } from "lucide-react";
 import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
-import { Tweet } from "../../modules/tweet/Tweet";
+import { Tweet_ } from "../../modules/tweet/Tweet";
 import { PostCitation, PostWithUser } from "../../modules/tweet/TweetTypes";
 import { TweetSidebar } from "../../modules/tweet/Sidebar";
 import { TweetHeader } from "../../modules/tweet/Header";
@@ -243,7 +243,7 @@ export class Publish extends React.PureComponent<Props, State> {
                             />}
 
                             <div className="content-container quote-highlight">
-                                {Tweet.formatContent(this.state.reply_to_post.post.content)}
+                                {Tweet_.formatContent(this.state.reply_to_post.post.content)}
                             </div>
                         </div>
 

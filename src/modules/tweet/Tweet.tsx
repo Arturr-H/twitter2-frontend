@@ -8,13 +8,14 @@ import { ActionBar } from "./ActionBar";
 import { TweetHeader } from "./Header";
 import { TweetSidebar } from "./Sidebar";
 import { TweetQuote } from "./TweetQuote";
-import { Link } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Text } from "../../components/text/Text";
 
 /* Interfaces */
 interface Props {
     post_with_user: PostWithUser | null,
     compose: (reply_to: number | null) => void,
+    navigate?: NavigateFunction
 }
 interface State {
     liked: boolean,
@@ -23,13 +24,14 @@ interface State {
     total_replies: number,
 }
 
-export class Tweet extends React.PureComponent<Props, State> {
+export class Tweet_ extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
         this.toggleBookmark = this.toggleBookmark.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
         this.initialize = this.initialize.bind(this);
+        this.onClick = this.onClick.bind(this);
         this.reply = this.reply.bind(this);
     }
 
@@ -98,9 +100,21 @@ export class Tweet extends React.PureComponent<Props, State> {
         this.props.compose(this.props.post_with_user.post.id);
     }
 
+    onClick(e: React.MouseEvent): void {
+        e.stopPropagation();
+        e.preventDefault();
+        if (this.props.post_with_user && this.props.navigate) {
+            const TO = "/post/" + this.props.post_with_user?.post.id;
+            this.props.navigate(TO)
+        }
+    }
+
     render(): React.ReactNode {
         return (
-            <div className="tweet">
+            <div
+                className="tweet"
+                onClick={this.onClick}
+            >
                 <TweetSidebar />
 
                 <div className="body">
@@ -113,9 +127,8 @@ export class Tweet extends React.PureComponent<Props, State> {
                     {/* Citation of another post if exists */}
                     {this.props.post_with_user
                         && this.props.post_with_user.post.citation
-                        && 
-                        
-                        <Link
+                        && <Link
+                            onClick={(e) => e.stopPropagation()}
                             to={"/post/" + this.props.post_with_user.post.citation.post_id}
                             style={{ textDecoration: "none" }}
                         >
@@ -127,7 +140,7 @@ export class Tweet extends React.PureComponent<Props, State> {
                     {/* Content of post */}
                     <div className="content-container">
                         {this.props.post_with_user !== null 
-                            ? Tweet.formatContent(this.props.post_with_user.post.content)
+                            ? Tweet_.formatContent(this.props.post_with_user.post.content)
                             : <Text.PSkeletalSentence lengths={[6, 4, 10, 8, 9]} />}
                     </div>
 
@@ -146,3 +159,13 @@ export class Tweet extends React.PureComponent<Props, State> {
         );
     }
 }
+
+const TweetWrapper = (props: Props): JSX.Element => {
+    const navigate = useNavigate();
+    return <Tweet_
+        {...props}
+        navigate={navigate}
+    />
+}
+
+export { TweetWrapper as Tweet }

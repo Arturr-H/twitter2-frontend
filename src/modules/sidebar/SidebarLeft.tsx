@@ -22,7 +22,7 @@ export class SidebarLeft extends React.PureComponent<Props, State> {
                     <NavButton icon={<Search size={20} />} text="Search" />
                     <NavButton icon={<Compass size={20} />} text="Discover" />
                     <NavButton icon={<User size={20} />} text="Profile" />
-                    <NavButton icon={<Bookmark size={20} />} text="Saved" />
+                    <NavButton to="/bookmarks" icon={<Bookmark size={20} />} text="Saved" />
 
                     <div style={{ flex: 1 }} />
 
