@@ -4,6 +4,7 @@ nav.navbar-top {
     width: 100%;
 
     padding: 0.5rem 1.5rem;
+    padding-right: 0.5rem;
     box-sizing: border-box;
 
     display: flex;
@@ -15,8 +16,20 @@ nav.navbar-top {
     flex-direction: row;
     justify-content: space-around;
     gap: 1rem;
+
+    position: relative;
+    height: 100%;
 }nav.navbar-top > .nav-links > a {
     display: flex;
     justify-content: center;
         align-items: center;
+
+    position: relative;
+    height: 100%;
+}nav.navbar-top > .nav-links .profile-image {
+    height: 100%;
+    border-radius: 50%;
+    padding: 0.25rem;
+    padding-left: 0;
+    box-sizing: border-box;
 }

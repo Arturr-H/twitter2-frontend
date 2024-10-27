@@ -16,7 +16,6 @@ nav.sidebar {
 }
 nav.sidebar-left {
     border-right: 0.1rem solid var(--border);
-
     display: flex;
     justify-content: flex-end;
 }
