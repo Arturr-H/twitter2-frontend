@@ -80,7 +80,7 @@ export class ActionBar extends React.PureComponent<Props, State> {
                     <Heart
                         color={this.props.liked ? LIKED_COLOR : "#ccc"}
                         fill={this.props.liked ? LIKED_COLOR : "none"}
-                        size={20}
+                        size={"1rem"}
                     />
                     <p
                         className="count"
@@ -101,7 +101,7 @@ export class ActionBar extends React.PureComponent<Props, State> {
                 >
                     <MessageSquare
                         color={"#ccc"}
-                        size={20}
+                        size={"1rem"}
                     />
                     <p className="count">
                         {this.props.total_replies}
@@ -124,7 +124,7 @@ export class ActionBar extends React.PureComponent<Props, State> {
                     <Bookmark
                         color={this.props.bookmarked ? BOOKMARKED_COLOR : "#ccc"}
                         fill={this.props.bookmarked ? BOOKMARKED_COLOR : "none"}
-                        size={20}
+                        size={"1rem"}
                     />
                 </button>
 
@@ -134,10 +134,10 @@ export class ActionBar extends React.PureComponent<Props, State> {
                     title="Reply"
                     onClick={this.onReply}
                 >
-                    <Reply color="#ccc" size={20} />
+                    <Reply color="#ccc" size={"1rem"} />
                 </button>
                 <button className="item" title="More">
-                    <MoreHorizontal color="#ccc" size={20} />
+                    <MoreHorizontal color="#ccc" size={"1rem"} />
                 </button>
             </div>
         )

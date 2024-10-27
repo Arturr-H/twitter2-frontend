@@ -140,3 +140,8 @@ body, html, #root {
 		width: 20rem;
 	}
 }
+@media screen and (max-width: 500px) {
+    html {
+        font-size: 14px;
+    }
+}
