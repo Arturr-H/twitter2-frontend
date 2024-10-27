@@ -42,6 +42,20 @@ nav.sidebar-right {
     color: #ccc;
 }
 
+/* Sync sidebar left and navbutton */
+@media screen and (max-width: 700px) {
+    nav.sidebar-left {
+        width: min-content !important;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    nav.sidebar-right {
+        display: none;
+    }nav.sidebar-left {
+        width: 30%;
+    }
+}
 @media screen and (min-width: 1250px) {
     nav.sidebar-right, nav.sidebar-left {
         width: 30%;

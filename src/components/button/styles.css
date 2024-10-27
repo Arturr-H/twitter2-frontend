@@ -66,9 +66,9 @@
     transition: color 0.05s ease-in-out, background 0.05s ease-in-out, border 0.05s ease-in-out;
 
     height: 2.25rem;
+}.navbutton > p {
     font-family: "Epilogue";
     font-size: 16px;
-
     text-align: left;
 }.navbutton:hover {
     background: var(--accent);
@@ -81,4 +81,13 @@
     background: var(--chart-1-highlight);
     border: var(--chart-1-highlight) 0.1rem solid;
     color: var(--foreground);
+}
+
+/* Sync sidebar left and navbutton */
+@media screen and (max-width: 700px) {
+    .navbutton > p {
+        display: none;
+    }.navbutton {
+        width: min-content;
+    }
 }

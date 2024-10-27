@@ -65,7 +65,7 @@ export class NavButton extends React.PureComponent<Props, State> {
             {this.props.icon && this.props.icon}
             {this.state.loading
                 ? <LoaderCircle className="loading-icon" size={24} />
-                : this.props.text}
+                : <p>{this.props.text}</p>}
         </>;
 
         return (
