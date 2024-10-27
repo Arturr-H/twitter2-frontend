@@ -58,25 +58,29 @@ export default class App extends React.PureComponent<Props, State> {
 						<Route path="/login" element={<Login />} />
 						<Route path="/sign-up" element={<SignUp />} />
 						<Route path="/register" element={<Register />} />
-					</Routes>
 
-                    <Home compose={this.compose}>
-                        <Routes>
-						    <Route index path="/" element={this.authNeeded(<Feed
-                                compose={this.compose}
-                                title="What's happening?"
-                                feed="/feed/newest"
-                            />)} />
-						    <Route path="/hashtag/:hashtag" element={<HashtagScene
-                                compose={this.compose}
-                            />} />
-						    <Route path="/bookmarks" element={<Bookmarks />} />
-						    <Route path="/search" element={<Search />} />
-                            <Route path="/post/:id" element={<PostScene compose={this.compose} />} />
-                            <Route path="/user/:handle" element={<ProfileScene />} />
-                            <Route path="/profile" element={<SelfProfile />} />
-                        </Routes>
-                    </Home>
+                        {/* All other paths */}
+                        <Route path="/*" element={
+                            <Home compose={this.compose}>
+                                <Routes>
+                                    <Route index path="/" element={this.authNeeded(<Feed
+                                        compose={this.compose}
+                                        title="What's happening?"
+                                        feed="/feed/newest"
+                                    />)} />
+                                    <Route path="/hashtag/:hashtag" element={<HashtagScene
+                                        compose={this.compose}
+                                    />} />
+                                    <Route path="/bookmarks" element={<Bookmarks />} />
+                                    <Route path="/search" element={<Search />} />
+                                    <Route path="/post/:id" element={<PostScene compose={this.compose} />} />
+                                    <Route path="/user/:handle" element={<ProfileScene />} />
+                                    <Route path="/profile" element={<SelfProfile />} />
+                                </Routes>
+                            </Home>
+                        } />
+					</Routes>
+                    
 
                     {/* Composing overlay */}
                     {this.state.compose !== null ? <div className="publish-post-overlay">
