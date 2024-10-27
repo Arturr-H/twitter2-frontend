@@ -1,6 +1,7 @@
 import React from "react";
 import { PostCitation } from "./TweetTypes";
 import { Trash2 } from "lucide-react";
+import { Backend } from "../../handlers/Backend";
 
 interface Props {
     /** The displayname and handle stored
@@ -60,7 +61,7 @@ export class TweetQuote extends React.PureComponent<Props> {
     render(): React.ReactNode {
         return (
             <div className="post-quote-container">
-                <div className="profile-image"></div>
+                <img src={Backend.profileImage(this.props.citation.user_id)} className="profile-image" />
                 <span className="text name">{this.props.citation.displayname}:&nbsp;&nbsp;</span>
                 {this.generateContentSlice(this.props.citation)}
 

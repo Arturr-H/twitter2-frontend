@@ -1,0 +1,19 @@
+.collapsible-chevron-up {
+    position: absolute;
+    left: 0.5rem;
+    bottom: 0.5rem;
+
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}.collapsible-chevron-up:hover {
+    background: var(--border);
+}.collapsible-chevron-up:active {
+    background: var(--border-highlight);
+}
+.collapsible {
+    position: relative;
+    overflow: hidden;
+}

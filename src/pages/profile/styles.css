@@ -1,6 +1,4 @@
-.profile-page {
-
-}.profile-page > .profile-container {
+.profile-container {
     width: 100%;
 
     display: flex;
@@ -9,30 +7,36 @@
     padding: 1rem;
     box-sizing: border-box;
     gap: 1rem;
-
-    border-bottom: 0.1rem solid var(--border);
-}.profile-page > .profile-container > .profile-image {
-    width: 5rem;
-    height: 5rem;
+}.profile-container > .profile-image {
+    height: 4rem;
+    aspect-ratio: 1;
     background: white;
     border-radius: 50%;
-}.profile-page > .profile-container > .name-container {
+}.profile-container > .name-container {
     display: flex;
     flex-direction: column;
-}.profile-page > .profile-container > .name-container > .displayname {
+}.profile-container > .name-container > .displayname {
     font-family: "Epilogue", sans-serif;
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 700;
 
     margin-top: auto;
-}.profile-page > .profile-container > .name-container > .handle {
+}.profile-container > .name-container > .handle {
     font-family: "Epilogue", sans-serif;
-    font-size: 32px;
+    font-size: 22px;
     font-weight: 400;
 
     color: #ccc;
     margin-bottom: auto;
-}.profile-page > .profile-container > .name-container > .handle > span {
-    font-size: 32px;
+}.profile-container > .name-container > .handle > span {
+    font-size: 22px;
     font-weight: 400;
+}
+
+.profile-image-button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
 }

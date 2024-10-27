@@ -43,7 +43,7 @@ export class Home extends React.PureComponent<Props, State> {
     }
 
     async getTrendingHashtags(): Promise<void> {
-        Backend.get<TrendingHashtag[]>("/hashtag/trending-today").then(e => {
+        Backend.get<TrendingHashtag[]>("/feed/hashtag/trending-today").then(e => {
             if (e.ok) {
                 this.setState({ trendingHashtags: e.value });
             }else{
@@ -61,7 +61,9 @@ export class Home extends React.PureComponent<Props, State> {
                         <SidebarLeft
                             compose={this.toggleCompose}
                         />
-                        {this.props.children}
+                        <div className="dynamic-home-content-container">
+                            {this.props.children}
+                        </div>
                         <SidebarRight
                             trendingHashtags={this.state.trendingHashtags}
                         />

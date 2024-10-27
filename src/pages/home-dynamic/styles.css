@@ -16,6 +16,12 @@ section.feed-wrapper {
     animation: publish-post-overlay-intro 0.1s ease-in-out forwards;
 }
 
+.dynamic-home-content-container {
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+}
+
 @keyframes publish-post-overlay-intro {
     from { opacity: 0; }
     to { opacity: 1; }

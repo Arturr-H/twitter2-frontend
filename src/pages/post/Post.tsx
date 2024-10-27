@@ -3,59 +3,59 @@ import React from "react";
 import "./styles.css";
 import { Feed } from "../../modules/feed/Feed";
 import { Tweet } from "../../modules/tweet/Tweet";
-import { Backend } from "../../handlers/Backend";
-import { PostWithUser } from "../../modules/tweet/TweetTypes";
-import toast from "react-hot-toast";
+import { PlusSquare } from "lucide-react";
+import { Button } from "../../components/button/Button";
+import { Collapsible } from "../../components/collapsible/Collapsible";
 
 /* Interfaces */
 interface Props {
-    id: number
+    id: number,
+    compose: (post_id: number | null) => void
 }
-interface State {
-    post_with_user: PostWithUser | null
-}
+interface State {}
 
 export class Post extends React.PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = {
-            post_with_user: null
-        }
-    }
-
-    componentDidMount(): void {
-        this.fetchPost();
-    }
-
-    async fetchPost(): Promise<void> {
-        Backend.get_auth<PostWithUser>("/post/id/" + this.props.id).then(e => {
-            if (e.ok) {
-                this.setState({ post_with_user: e.value });
-            }else {
-                toast(e.error.description);
-            }
-        })
+        this.state = {}
     }
 
     render(): React.ReactNode {
         return (
-            <div style={{ overflow: "scroll" }}>
-                <div className="header-tweet-container">
+            <>
+                <Collapsible className="header-tweet-container">
                     <Tweet
-                        post_with_user={this.state.post_with_user}
+                        post_id={this.props.id}
                         compose={() => {}}
                     />
+                </Collapsible>
+
+                <div className="post-scene-opinion-container">
+                    {/* {this.state.opinions.length === 0
+                        ? <Text.P text="No opinions" className="no-opinions-info" />
+                        : <Opinions post_id={this.props.id} opinions={this.state.opinions} />}
+                     */}
+                    <button className="create-opinion">
+                        <PlusSquare color="#fff" />
+                    </button>
                 </div>
 
                 <Feed
-                    style={{ flex: 1, height: "100%" }}
+                    style={{ display: "flex", flex: 1 }}
                     title="Replies"
-                    feed="/post/feed"
-                    compose={() => {}}
-                    
+                    feed={`/feed/replies/${this.props.id}`}
+                    compose={this.props.compose}
                 />
-            </div>
+
+                <div style={{ boxSizing: "border-box", padding: "1rem"}}>
+                    <Button
+                        primary
+                        expand
+                        onClickSync={() => this.props.compose(this.props.id)}
+                        text="Reply" />
+                </div>
+            </>
         );
     }
 }

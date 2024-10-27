@@ -29,6 +29,13 @@
     background: var(--chart-1-highlight);
     border: var(--chart-1-highlight) 0.1rem solid;
     color: var(--foreground);
+}.button.destructive {
+    background: var(--chart-5);
+    border: var(--chart-5-highlight) 0.1rem solid;
+}.button.destructive:hover {
+    background: var(--chart-5-highlight);
+    border: var(--chart-5-highlight) 0.1rem solid;
+    color: var(--foreground);
 }.button.expand {
     width: 100%;
 }
@@ -65,6 +72,8 @@
     text-align: left;
 }.navbutton:hover {
     background: var(--accent);
+}.navbuttor:focus {
+    outline: 0.1rem solid blue;
 }.navbutton.primary {
     background: var(--primary-foreground);
     border: var(--border) 0.1rem solid;

@@ -3,14 +3,16 @@ import { Home } from "./pages/home-dynamic/Home"
 import { Login } from "./pages/login/Login"
 import { Toaster } from "react-hot-toast";
 import { SignUp } from "./pages/signup/SignUp";
-import React, { ReactNode } from "react";
+import React, { ReactNode, RefObject } from "react";
 import { Cookie } from "./handlers/Cookie";
 import { Register } from "./pages/register/Register";
-import { Profile } from "./pages/profile/Profile";
+import { UserProfile } from "./pages/profile/UserProfile";
 import { Feed } from "./modules/feed/Feed";
 import { Publish } from "./pages/publish/Publish";
 import { Post } from "./pages/post/Post";
 import { Bookmarks } from "./pages/bookmarks/Bookmarks";
+import { Search } from "./pages/search/Search";
+import { SelfProfile } from "./pages/profile/SelfProfile";
 
 /* Interfaces */
 interface Props {}
@@ -56,7 +58,6 @@ export default class App extends React.PureComponent<Props, State> {
 						<Route path="/login" element={<Login />} />
 						<Route path="/sign-up" element={<SignUp />} />
 						<Route path="/register" element={<Register />} />
-                        <Route path="/user/:handle" element={<ProfileScene />} />
 					</Routes>
 
                     <Home compose={this.compose}>
@@ -64,13 +65,16 @@ export default class App extends React.PureComponent<Props, State> {
 						    <Route index path="/" element={this.authNeeded(<Feed
                                 compose={this.compose}
                                 title="What's happening?"
-                                feed="/post/feed"
+                                feed="/feed/newest"
                             />)} />
 						    <Route path="/hashtag/:hashtag" element={<HashtagScene
                                 compose={this.compose}
                             />} />
 						    <Route path="/bookmarks" element={<Bookmarks />} />
-                            <Route path="/post/:id" element={<PostScene />} />
+						    <Route path="/search" element={<Search />} />
+                            <Route path="/post/:id" element={<PostScene compose={this.compose} />} />
+                            <Route path="/user/:handle" element={<ProfileScene />} />
+                            <Route path="/profile" element={<SelfProfile />} />
                         </Routes>
                     </Home>
 
@@ -89,21 +93,28 @@ export default class App extends React.PureComponent<Props, State> {
 }
 
 function HashtagScene({ compose }: { compose: (n: number|null) => void }) {
+    const FEED_PREFIX = "/feed/hashtag/single/";
     const { hashtag } = useParams<{ hashtag: string }>();
+    const ref: RefObject<Feed> = React.createRef();
+    React.useEffect(() => {
+        ref.current?.setFeed(FEED_PREFIX + hashtag);
+    }, [hashtag]);
+
     if (hashtag) { return <Feed
         compose={compose}
-        feed={"/hashtag/single/" + hashtag} title={"#" + hashtag}
+        ref={ref}
+        feed={FEED_PREFIX + hashtag} title={"#" + hashtag}
     /> }
     else { return <p>Not found!</p> }
 }
 function ProfileScene() {
     const { handle } = useParams<{ handle: string }>();
-    if (handle) { return <Profile handle={handle} /> }
+    if (handle) { return <UserProfile handle={handle} /> }
     else { return <p>Not found!</p> }
 }
-function PostScene() {
+function PostScene({ compose }: { compose: (n: number|null) => void }) {
     const { id } = useParams<{ id: string }>();
     let id_ = parseInt(id ?? "null");
-    if (id_ && !Number.isNaN(id_)) { return <Post id={id_} /> }
+    if (id_ && !Number.isNaN(id_)) { return <Post compose={compose} id={id_} /> }
     else { return <p>Not found!</p> }
 }

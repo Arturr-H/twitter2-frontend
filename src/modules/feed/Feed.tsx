@@ -4,8 +4,8 @@ import "./styles.css";
 import { Tweet } from "../tweet/Tweet";
 import { Backend } from "../../handlers/Backend";
 import { PostWithUser } from "../tweet/TweetTypes";
-import toast from "react-hot-toast";
 import { Text } from "../../components/text/Text";
+import toast from "react-hot-toast";
 
 /* Interfaces */
 interface Props {
@@ -25,19 +25,30 @@ export class Feed extends React.PureComponent<Props, State> {
         this.state = {
             posts: []
         }
+
+        this.setFeed = this.setFeed.bind(this);
     }
 
     componentDidMount(): void {
-        this.getFeed();
+        this.setFeed(this.props.feed);
     }
 
-    async getFeed(): Promise<void> {
-        Backend.get_auth<PostWithUser[]>(this.props.feed).then(async e => {
+    async setFeed(feed: string): Promise<void> {
+        try {
+            this.setState({ posts: await this.getFeed(feed) })
+        }catch (e) {
+            toast(`${e}`);
+        }
+    }
+    async getFeed(feed: string): Promise<PostWithUser[]> {
+        return Backend.get_auth<PostWithUser[]>(feed).then(async e => {
             if (e.ok) {
-                this.setState({ posts: e.value as PostWithUser[] })
+                return e.value as PostWithUser[];
             }else {
-                toast(e.error.description);
+                throw `Cant fetch feed (${e.error.description})`;
             }
+        }).catch(e => {
+            throw `Cant fetch feed ${e}`;
         })
     }
 
@@ -51,7 +62,7 @@ export class Feed extends React.PureComponent<Props, State> {
 
                 {this.state.posts.map((post, i) => <React.Fragment key={"post" + i}>
                     <Tweet
-                        post_with_user={post}
+                        post_content_override={post}
                         compose={this.props.compose}
                     />
                     <div className="horizontal-row" />

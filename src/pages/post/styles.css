@@ -5,3 +5,29 @@
     border-bottom: 0.1rem solid var(--border);
     background: var(--primary-foreground);
 }
+.post-scene-opinion-container {
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    box-sizing: border-box;
+
+    border-bottom: 0.1rem solid var(--border);
+    display: flex;
+    align-items: center;
+}
+.no-opinions-info {
+    color: var(--border-highlight);
+}
+
+.create-opinion {
+    border: none;
+    background: none;
+
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    cursor: pointer;
+}.create-opinion:hover {
+    transform: scale(1.05);
+}

@@ -9,15 +9,25 @@ export interface Post {
     citation: PostCitation | null,
 }
 export interface PostWithUser {
-    post: Post,
-    user: UserInfo,
-    // metadata: PostMetadata,
+    id: number,
+    content: string,
+    total_likes: number,
+    total_replies: number,
+    replies_to: number | null,
+    
+    citation: PostCitation | null,
+
+    poster_id: number,
+    handle: string,
+    displayname: string
+
     liked: boolean,
     bookmarked: boolean,
 }
 export interface UserInfo {
     handle: string,
-    displayname: string
+    displayname: string,
+    user_id: number
 }
 export interface PostMetadata {
     /** If the user which is viewing

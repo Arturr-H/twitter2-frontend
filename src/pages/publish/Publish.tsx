@@ -7,7 +7,7 @@ import { Check, PaintbrushIcon, Quote, Reply, X } from "lucide-react";
 import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
 import { Tweet_ } from "../../modules/tweet/Tweet";
-import { PostCitation, PostWithUser } from "../../modules/tweet/TweetTypes";
+import { PostCitation, PostWithUser, UserInfo } from "../../modules/tweet/TweetTypes";
 import { TweetSidebar } from "../../modules/tweet/Sidebar";
 import { TweetHeader } from "../../modules/tweet/Header";
 import { TweetQuote } from "../../modules/tweet/TweetQuote";
@@ -21,7 +21,8 @@ interface State {
     text: string,
     reply_to_post: PostWithUser | null,
     quoting: boolean,
-    quote: PostCitation | null
+    quote: PostCitation | null,
+    current_user_info: UserInfo | null
 }
 
 export class Publish extends React.PureComponent<Props, State> {
@@ -32,7 +33,8 @@ export class Publish extends React.PureComponent<Props, State> {
             text: "",
             reply_to_post: null,
             quoting: false,
-            quote: null
+            quote: null,
+            current_user_info: null
         };
 
         this.toggleQuoting = this.toggleQuoting.bind(this);
@@ -83,6 +85,16 @@ export class Publish extends React.PureComponent<Props, State> {
         document.addEventListener("mouseup", this.trySetQuote)
         document.addEventListener("keyup", (e) => {
             if (e.key === "Escape") this.stopQuoting();
+        });
+
+        Backend.get_auth<UserInfo>("/user/profile").then(e => {
+            if (e.ok) {
+                this.setState({
+                    current_user_info: e.value,
+                });
+            }else {
+                toast(e.error.description);
+            }
         })
     }
 
@@ -137,7 +149,7 @@ export class Publish extends React.PureComponent<Props, State> {
     /** Tries to set the quote */
     trySetQuote(): void {
         let quote = this.getSelectionText();
-        let reply_content = this.state.reply_to_post?.post.content;
+        let reply_content = this.state.reply_to_post?.content;
         if (quote !== "" && reply_content && reply_content.includes(quote)) {
             let start_ref = reply_content.indexOf(quote);
             let end_ref = start_ref + quote.length;
@@ -175,10 +187,10 @@ export class Publish extends React.PureComponent<Props, State> {
             end,
             ellipsis_right,
             ellipsis_left,
-            post_id: this.state.reply_to_post.post.id,
-            displayname: this.state.reply_to_post.user.displayname,
-            handle: this.state.reply_to_post.user.handle,
-            user_id: this.state.reply_to_post.post.poster_id,
+            post_id: this.state.reply_to_post.id,
+            displayname: this.state.reply_to_post.displayname,
+            handle: this.state.reply_to_post.handle,
+            user_id: this.state.reply_to_post.poster_id,
         }
     }
 
@@ -229,21 +241,21 @@ export class Publish extends React.PureComponent<Props, State> {
                     }}
                 >
                     <div className="tweet">
-                        <TweetSidebar />
+                        <TweetSidebar user_id={this.state.reply_to_post.poster_id} />
 
                         <div className="body">
                             <TweetHeader
-                                displayname={this.state.reply_to_post.user.displayname}
-                                handle={this.state.reply_to_post.user.handle}
-                                user_id={this.state.reply_to_post.post.poster_id}
+                                displayname={this.state.reply_to_post.displayname}
+                                handle={this.state.reply_to_post.handle}
+                                user_id={this.state.reply_to_post.poster_id}
                             />
 
-                            {this.state.reply_to_post.post.citation && <TweetQuote
-                                citation={this.state.reply_to_post.post.citation}
+                            {this.state.reply_to_post.citation && <TweetQuote
+                                citation={this.state.reply_to_post.citation}
                             />}
 
                             <div className="content-container quote-highlight">
-                                {Tweet_.formatContent(this.state.reply_to_post.post.content)}
+                                {Tweet_.formatContent(this.state.reply_to_post.content)}
                             </div>
                         </div>
 
@@ -263,12 +275,16 @@ export class Publish extends React.PureComponent<Props, State> {
                 <div className="publish-container">
                     <div className="publish-tweet">
                         <div className="sidebar">
-                            <div className="profile-image"></div>
+                            <img
+                                className="profile-image"
+                                src={Backend.profileImage(this.state.current_user_info?.user_id)}
+                                alt="Profile image"
+                            />
                         </div>
                         <div className="body">
                             <div className="header">
-                                <p className="displayname">Artur Hoffsümmer</p>
-                                <p className="handle">~artur</p>
+                                <p className="displayname">{this.state.current_user_info?.displayname}</p>
+                                <p className="handle">~{this.state.current_user_info?.handle}</p>
                             </div>
 
                             {/* The quote (if we have selected one) */}

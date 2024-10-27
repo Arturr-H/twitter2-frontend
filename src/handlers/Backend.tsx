@@ -1,11 +1,8 @@
 import { Cookie } from "./Cookie";
 
-const BACKEND_URL = "http://127.0.0.1:8080";
-
 type Ok<T> = { ok: true, value: T };
 type Err<E> = { ok: false, error: E };
 type Result<T, E> = Ok<T> | Err<E>;
-
 
 function Ok<T>(value: T): Result<T, never> { return { ok: true, value }; }
 function Err<E>(error: E): Result<never, E> { return { ok: false, error }; }
@@ -17,27 +14,39 @@ interface ErrorMessage {
 }
 
 export class Backend {
+    static BACKEND_URL: string = "http://127.0.0.1:8080";
+
     /** Tries to fetch backend and convert response
      * into T, else returning ErrorMessage interface */
     private static async fetch_inner<T>(
         ext: string,
         method?: string,
         auth?: string,
-        body?: string
+        body?: string | FormData | Blob,
+        skipContentType?: boolean,
     ): Promise<Result<T, ErrorMessage>> {
-        return fetch(BACKEND_URL + ext, {
+        let headers = { "Authorization": "Bearer " + auth };
+
+        return fetch(this.BACKEND_URL + ext, {
             method: method ?? "GET",
             body: body,
-            headers: {
-                "Authorization": "Bearer " + auth,
+            headers: skipContentType ? headers : {
+                ...headers,
                 "Content-Type": "application/json"
             }
         }).then(async res => {
+            const text = await res.text();
             if (res.status != 200) {
-                const json = await res.json();
-                return Err(json as ErrorMessage);
+                try {
+                    let json: ErrorMessage = JSON.parse(text);
+                    return Err(json);
+                }catch(e) {
+                    return Err({
+                        description: `JSON was NOT returned (${text})`,
+                        status: "-1"
+                    })
+                }
             }else {
-                const text = await res.text();
                 if (text === "") return Ok(null);
 
                 try {
@@ -45,7 +54,7 @@ export class Backend {
                     return Ok(json);
                 }catch (e) {
                     return Err({
-                        description: `Error parsing JSON (${e})`,
+                        description: `Error parsing JSON (text: ${text})`,
                         status: "-1"
                     });
                 }
@@ -82,6 +91,19 @@ export class Backend {
         if (!body_.ok) { return body_ /* Error message */ };
         // Todo cookie return error if not present
         return this.fetch_inner<T>(ext, "POST", Cookie.get("token") ?? "", body_.value)
+    }
+
+    /** Send POST request to an endpoint with auth and form body and retrieve data T */
+    static async post_infer_content_type_auth<T>(ext: string, body: FormData): Promise<Result<T, ErrorMessage>> {
+        // Todo cookie return error if not present
+        return this.fetch_inner<T>(ext, "POST", Cookie.get("token") ?? "", body, true)
+    }
+
+    /** Get the URL for some user's profile image */
+    static profileImage(user_id: number | undefined | null): string {
+        return Backend.BACKEND_URL
+            + "/user/profile-image/"
+            + (typeof user_id === "number" ? user_id : -1);
     }
 
     private static stringifyBody(body: any): Result<string, ErrorMessage> {

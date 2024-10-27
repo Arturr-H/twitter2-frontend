@@ -10,10 +10,17 @@ import { TweetSidebar } from "./Sidebar";
 import { TweetQuote } from "./TweetQuote";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Text } from "../../components/text/Text";
+import { OpinionInterface } from "./Opinions";
 
 /* Interfaces */
 interface Props {
-    post_with_user: PostWithUser | null,
+    /** If we want to provide an external source of
+     * data for this post. Can not be set with post_id
+     * not undefined at the same time */
+    post_content_override?: PostWithUser,
+
+    /** Make this tweet fetch its own content */
+    post_id?: number,
     compose: (reply_to: number | null) => void,
     navigate?: NavigateFunction
 }
@@ -22,31 +29,98 @@ interface State {
     bookmarked: boolean,
     total_likes: number,
     total_replies: number,
+    opinions: OpinionInterface[],
+    action_bar_active: boolean,
+    post_with_user: PostWithUser | null
 }
 
-export class Tweet_ extends React.PureComponent<Props, State> {
+export class Tweet_ extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
         this.toggleBookmark = this.toggleBookmark.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
-        this.initialize = this.initialize.bind(this);
         this.onClick = this.onClick.bind(this);
         this.reply = this.reply.bind(this);
+
+        this.state = {
+            action_bar_active: false, liked: false,
+            bookmarked: false, total_likes: 0, total_replies: 0,
+            opinions: [],
+            post_with_user: null
+        }
     }
 
+    /* Initialize */
     componentDidMount(): void {
-        this.initialize();
+        this.setPostContent();
     }
 
-    initialize(): void {
-        if (!this.props.post_with_user) return;
-        this.setState({
-            liked: this.props.post_with_user.liked,
-            bookmarked: this.props.post_with_user.bookmarked,
-            total_likes: this.props.post_with_user.post.total_likes
-                - (this.props.post_with_user.liked ? 1 : 0),
-            total_replies: this.props.post_with_user.post.total_replies,
+    /** Sets from override external content or fetches */
+    async setPostContent(): Promise<void> {
+        let { post_id, post_content_override } = this.props;
+        if (post_id !== undefined && post_content_override !== undefined) {
+            throw new Error("Can't set both post_id and post_content_override for Tweet ");
+        }else {
+            /* Fetch */
+            if (post_id !== undefined) {
+                let post_with_user
+                    = await Tweet_.fetchContent(post_id);
+                let  { liked, bookmarked, total_likes, total_replies }
+                    = post_with_user;
+
+                this.setState({
+                    liked, bookmarked, total_likes, total_replies,
+                    opinions: await Tweet_.getOpinions(post_id),
+                    action_bar_active: true, post_with_user
+                });
+            }
+            /* External input */
+            else if (post_content_override !== undefined) {
+                let { liked, bookmarked, total_likes, total_replies, id }
+                    = post_content_override;
+                this.setState({
+                    liked, bookmarked, total_likes, total_replies,
+                    opinions: await Tweet_.getOpinions(id),
+                    action_bar_active: true,
+                    post_with_user: post_content_override
+                })
+            }
+
+            /* Nothing provided */
+            else {
+                throw new Error("No content provided for post")
+            }
+        }
+    }
+
+    /** Returns a list of opinions */
+    public static async getOpinions(_post_id: number): Promise<OpinionInterface[]> {
+        return []
+        // return Backend.get_auth<OpinionInterface[]>("/post/opinion/get-opinions/" + post_id).then(e => {
+        //     if (e.ok) {
+        //         return e.value;
+        //     }else {
+        //         toast(e.error.description);
+        //         return []
+        //     }
+        // }).catch(e => {
+        //     toast(e);
+        //     return []
+        // });
+    }
+
+    /** Fetch tweet content */
+    public static async fetchContent(post_id: number): Promise<PostWithUser> {
+        return Backend.get_auth<PostWithUser>("/post/id/" + post_id).then(async e => {
+            if (e.ok) {
+                return e.value;
+            }else {
+                toast(e.error.description);
+                throw `Could not fetch /post/id/${post_id} ${e.error.description}`;
+            }
+        }).catch(e => {
+            throw `Error fetching /post/id/${post_id} ${e.error.description}`;
         })
     }
 
@@ -62,6 +136,7 @@ export class Tweet_ extends React.PureComponent<Props, State> {
                         to={`/hashtag/${part.substring(1)}`}
                         key={index}
                         className="hashtag"
+                        onClick={(e) => e.stopPropagation()}
                     >{part}</Link>
                 );
             } else if (part.startsWith('@')) {
@@ -70,6 +145,7 @@ export class Tweet_ extends React.PureComponent<Props, State> {
                         to={`/user/${part.substring(1)}`}
                         key={index}
                         className="mention"
+                        onClick={(e) => e.stopPropagation()}
                     >{part}</Link>
                 );
             } else {
@@ -78,33 +154,38 @@ export class Tweet_ extends React.PureComponent<Props, State> {
         });
     }
 
+    /** Toggle liked (send fetch req) */
     toggleLike(): void {
-        if (!this.props.post_with_user) return;
+        if (!this.state.post_with_user) return;
         let like = !this.state.liked;
         Backend.post_auth("/post/set-like", {
-            to: like, post_id: this.props.post_with_user.post.id
+            to: like, post_id: this.state.post_with_user.id
         }).then(e => { if (!e.ok) { toast(e.error.description); } })
         this.setState({ liked: !this.state.liked })
     }
+
+    /** Toggle bookmarked (send fetch req) */
     toggleBookmark(): void {
-        if (!this.props.post_with_user) return;
+        if (!this.state.post_with_user) return;
         let bookmark = !this.state.bookmarked;
         Backend.post_auth("/post/set-bookmark", {
-            to: bookmark, post_id: this.props.post_with_user.post.id
+            to: bookmark, post_id: this.state.post_with_user.id
         }).then(e => { if (!e.ok) { toast(e.error.description); } })
         this.setState({ bookmarked: !this.state.bookmarked })
     }
 
+    /** When we press reply in the action bar */
     reply(): void {
-        if (!this.props.post_with_user) return;
-        this.props.compose(this.props.post_with_user.post.id);
+        if (!this.state.post_with_user) return;
+        this.props.compose(this.state.post_with_user.id);
     }
 
+    /** Navigate to post */
     onClick(e: React.MouseEvent): void {
         e.stopPropagation();
         e.preventDefault();
-        if (this.props.post_with_user && this.props.navigate) {
-            const TO = "/post/" + this.props.post_with_user?.post.id;
+        if (this.state.post_with_user && this.props.navigate) {
+            const TO = "/post/" + this.state.post_with_user?.id;
             this.props.navigate(TO)
         }
     }
@@ -115,37 +196,39 @@ export class Tweet_ extends React.PureComponent<Props, State> {
                 className="tweet"
                 onClick={this.onClick}
             >
-                <TweetSidebar />
+                <TweetSidebar user_id={this.state.post_with_user?.poster_id} />
 
                 <div className="body">
                     <TweetHeader
-                        displayname={this.props.post_with_user?.user.displayname ?? null}
-                        handle={this.props.post_with_user?.user.handle ?? null}
-                        user_id={this.props.post_with_user?.post.poster_id ?? null}
+                        displayname={this.state.post_with_user?.displayname ?? null}
+                        handle={this.state.post_with_user?.handle ?? null}
+                        user_id={this.state.post_with_user?.poster_id ?? null}
                     />
 
                     {/* Citation of another post if exists */}
-                    {this.props.post_with_user
-                        && this.props.post_with_user.post.citation
+                    {this.state.post_with_user
+                        && this.state.post_with_user.citation
                         && <Link
                             onClick={(e) => e.stopPropagation()}
-                            to={"/post/" + this.props.post_with_user.post.citation.post_id}
+                            to={"/post/" + this.state.post_with_user.citation.post_id}
                             style={{ textDecoration: "none" }}
                         >
                             <TweetQuote
-                                citation={this.props.post_with_user.post.citation}
+                                citation={this.state.post_with_user.citation}
                             />
                         </Link>}
 
                     {/* Content of post */}
                     <div className="content-container">
-                        {this.props.post_with_user !== null 
-                            ? Tweet_.formatContent(this.props.post_with_user.post.content)
+                        {this.state.post_with_user !== null 
+                            ? Tweet_.formatContent(this.state.post_with_user.content)
                             : <Text.PSkeletalSentence lengths={[6, 4, 10, 8, 9]} />}
                     </div>
 
                     {/* Like, share, reply etc */}
-                    {this.state && <ActionBar
+                    {this.state.action_bar_active && <ActionBar
+                        post_id={this.state.post_with_user?.id ?? -29}
+                        opinions={this.state.opinions}
                         liked={this.state.liked}
                         bookmarked={this.state.bookmarked}
                         toggleLike={this.toggleLike}

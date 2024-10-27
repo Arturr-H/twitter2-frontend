@@ -14,8 +14,9 @@ export class TweetHeader extends React.PureComponent<Props> {
         return (
             <div className="header">
                 <Link
-                    to={this.props.user_id
-                        ? ("/user/" + this.props.user_id) : "#"}
+                    to={this.props.handle
+                        ? ("/user/" + this.props.handle) : "#"}
+                    onClick={(e) => e.stopPropagation()}
                     className="header-link"
                 >
                     {this.props.displayname && this.props.handle ? <>

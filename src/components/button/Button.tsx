@@ -10,7 +10,10 @@ interface Props {
     onClickAsync?: () => Promise<void>,
 
     primary?: true,
+    destructive?: true,
     expand?: true,
+
+    icon?: JSX.Element
 }
 interface State {
     loading: boolean
@@ -61,9 +64,11 @@ export class Button extends React.PureComponent<Props, State> {
                 onClick={this.onClick}
                 className={`button
                     ${this.props.primary && "primary"}
+                    ${this.props.destructive && "destructive"}
                     ${this.props.expand && "expand"}
                 `}
             >
+                {this.props.icon}
                 {this.state.loading
                     ? <LoaderCircle className="loading-icon" size={24} />
                     : this.props.text}
