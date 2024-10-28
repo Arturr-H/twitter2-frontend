@@ -22,7 +22,7 @@ interface Props {
     /** Make this tweet fetch its own content */
     post_id?: number,
     compose: (reply_to: number | null) => void,
-    navigate?: NavigateFunction
+    navigate?: NavigateFunction,
 }
 interface State {
     liked: boolean,
@@ -243,10 +243,14 @@ export class Tweet_ extends React.Component<Props, State> {
     }
 }
 
-const TweetWrapper = (props: Props): JSX.Element => {
+interface WrapperProps {
+    refDrill?: React.RefObject<Tweet_>
+}
+const TweetWrapper = (props: Props & WrapperProps): JSX.Element => {
     const navigate = useNavigate();
     return <Tweet_
         {...props}
+        ref={props.refDrill}
         navigate={navigate}
     />
 }

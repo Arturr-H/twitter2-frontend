@@ -41,7 +41,10 @@ export class TweetQuote extends React.PureComponent<Props> {
                 if (last && c[e ?? (c.length - 2) + 1] !== " ") {
                     space = false;
                 }
-                spans.push(<span className={"text-" + t} key={"ws-q" + index + word + s}>
+                spans.push(<span
+                    className={"text-" + t}
+                    key={"ws-q" + index + word + s + quote.beginning + e}
+                >
                     {word}{space ? <>&nbsp;</> : null}
                 </span>);
             });

@@ -1,9 +1,8 @@
 /* Imports */
-import React from "react";
+import React, { RefObject } from "react";
 import "./styles.css";
 import { Feed } from "../../modules/feed/Feed";
-import { Tweet } from "../../modules/tweet/Tweet";
-import { PlusSquare } from "lucide-react";
+import { Tweet, Tweet_ } from "../../modules/tweet/Tweet";
 import { Button } from "../../components/button/Button";
 import { Collapsible } from "../../components/collapsible/Collapsible";
 
@@ -12,13 +11,28 @@ interface Props {
     id: number,
     compose: (post_id: number | null) => void
 }
-interface State {}
+interface State {
+    post_id: number
+}
 
 export class Post extends React.PureComponent<Props, State> {
+    feed: RefObject<Feed> = React.createRef();
+    tweet: RefObject<Tweet_> = React.createRef();
     constructor(props: Props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            post_id: this.props.id
+        }
+
+        this.setPost = this.setPost.bind(this);
+    }
+
+    setPost(post_id: number): void {
+        this.feed.current?.setFeed(`/feed/replies/${post_id}`);
+        this.setState({ post_id }, () => {
+            this.tweet.current?.setPostContent();
+        });
     }
 
     render(): React.ReactNode {
@@ -26,26 +40,18 @@ export class Post extends React.PureComponent<Props, State> {
             <>
                 <Collapsible className="header-tweet-container">
                     <Tweet
-                        post_id={this.props.id}
+                        refDrill={this.tweet}
+                        post_id={this.state.post_id}
                         compose={() => {}}
                     />
                 </Collapsible>
 
-                <div className="post-scene-opinion-container">
-                    {/* {this.state.opinions.length === 0
-                        ? <Text.P text="No opinions" className="no-opinions-info" />
-                        : <Opinions post_id={this.props.id} opinions={this.state.opinions} />}
-                     */}
-                    <button className="create-opinion">
-                        <PlusSquare color="#fff" />
-                    </button>
-                </div>
-
                 <Feed
                     style={{ display: "flex", flex: 1 }}
                     title="Replies"
-                    feed={`/feed/replies/${this.props.id}`}
+                    feed={`/feed/replies/${this.state.post_id}`}
                     compose={this.props.compose}
+                    ref={this.feed}
                 />
 
                 <div style={{ boxSizing: "border-box", padding: "1rem"}}>
