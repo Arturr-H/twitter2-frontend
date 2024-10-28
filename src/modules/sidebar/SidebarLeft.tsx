@@ -2,7 +2,7 @@
 import React from "react";
 import "./styles.css";
 import { NavButton } from "../../components/button/NavButton";
-import { Bookmark, Compass, Home, PenBox, Search, Settings, User } from "lucide-react";
+import { Bookmark, Home, PenBox, Search, Settings, User } from "lucide-react";
 
 /* Interfaces */
 interface Props {
@@ -21,7 +21,6 @@ export class SidebarLeft extends React.PureComponent<Props, State> {
                 <div className="sidebar-inner">
                     <NavButton icon={<Home size={"1rem"} />} text="Home" to="/" />
                     <NavButton icon={<Search size={"1rem"} />} text="Search" to="/search" />
-                    <NavButton icon={<Compass size={"1rem"} />} text="Discover" />
                     <NavButton icon={<User size={"1rem"} />} text="Profile" to="/profile" />
                     <NavButton icon={<Bookmark size={"1rem"} />} text="Saved" to="/bookmarks" />
 
