@@ -35,7 +35,9 @@ export class Feed extends React.PureComponent<Props, State> {
 
     async setFeed(feed: string): Promise<void> {
         try {
-            this.setState({ posts: await this.getFeed(feed) })
+            this.setState({ posts: [] }, async () => {
+                this.setState({ posts: await this.getFeed(feed) })
+            })
         }catch (e) {
             toast(`${e}`);
         }
@@ -62,6 +64,7 @@ export class Feed extends React.PureComponent<Props, State> {
 
                 {this.state.posts.map((post, i) => <React.Fragment key={"post" + i}>
                     <Tweet
+                        key={"post--" + i}
                         post_content_override={post}
                         compose={this.props.compose}
                     />
