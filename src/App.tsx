@@ -117,8 +117,16 @@ function ProfileScene() {
     else { return <p>Not found!</p> }
 }
 function PostScene({ compose }: { compose: (n: number|null) => void }) {
+    const ref = React.createRef<Post>();
     const { id } = useParams<{ id: string }>();
+
     let id_ = parseInt(id ?? "null");
-    if (id_ && !Number.isNaN(id_)) { return <Post compose={compose} id={id_} /> }
+    React.useEffect(() => {
+        ref.current?.setPost(id_);
+    });
+
+    if (id_ && !Number.isNaN(id_)) {
+        return <Post ref={ref} compose={compose} id={id_} />
+    }
     else { return <p>Not found!</p> }
 }
