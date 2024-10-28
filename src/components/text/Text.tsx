@@ -30,7 +30,11 @@ export class Text extends React.PureComponent<Props, State> {
     }
     static PSkeletalSentence(props: { lengths: number[] }): JSX.Element {
         return <div className="skeletal-sentence-container">
-            {props.lengths.map(e => <Text.PSkeletal margined={false} length={e} />)}
+            {props.lengths.map((e, i) => <Text.PSkeletal
+                margined={false}
+                length={e}
+                key={"skeletal-sentence-" + i}
+            />)}
         </div>
     }
 }
