@@ -1,15 +1,15 @@
 section.feed-wrapper {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    overflow-x: hidden;
     height: calc(100% - var(--navbar-height));
 }
 
 .publish-post-overlay {
     top: 0;
-    position: absolute;
+    position: fixed;
     width: 100%;
-    height: 100%;
+    height: 100vh;
 
     backdrop-filter: blur(5px) brightness(50%);
     opacity: 0;

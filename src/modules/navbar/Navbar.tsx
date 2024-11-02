@@ -2,10 +2,11 @@
 import React from "react";
 import "./styles.css";
 import { Text } from "../../components/text/Text";
-import { Home, Search, User } from "lucide-react";
+import { Home, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { UserInfo } from "../tweet/TweetTypes";
 import { Backend } from "../../handlers/Backend";
+import { Cookie } from "../../handlers/Cookie";
 
 /* Interfaces */
 interface Props {}
@@ -25,6 +26,7 @@ export class Navbar extends React.PureComponent<Props, State> {
     componentDidMount(): void {
         Backend.get_auth<UserInfo>("/user/profile").then(e => {
             if (e.ok) {
+                Cookie.set("user_id", e.value.user_id.toString(), 31);
                 this.setState({ user_info: e.value });
             }else {
                 console.error(e.error.description);

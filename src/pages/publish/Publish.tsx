@@ -86,6 +86,10 @@ export class Publish extends React.PureComponent<Props, State> {
         document.addEventListener("keyup", (e) => {
             if (e.key === "Escape") this.stopQuoting();
         });
+        /* Esc */
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") this.props.close();
+        });
 
         Backend.get_auth<UserInfo>("/user/profile").then(e => {
             if (e.ok) {
@@ -148,6 +152,7 @@ export class Publish extends React.PureComponent<Props, State> {
 
     /** Tries to set the quote */
     trySetQuote(): void {
+        if (!this.state.quoting) return;
         let quote = this.getSelectionText();
         let reply_content = this.state.reply_to_post?.content;
         if (quote !== "" && reply_content && reply_content.includes(quote)) {
@@ -227,7 +232,7 @@ export class Publish extends React.PureComponent<Props, State> {
                         className="close-button"
                         onClick={this.props.close}
                     >
-                        <X strokeWidth={3} size={16} color="#fff" />
+                        <X strokeWidth={3} size={"0.75rem"} color="#fff" />
                     </button>
                 </div>
 

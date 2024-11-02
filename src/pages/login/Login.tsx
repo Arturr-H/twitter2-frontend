@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 /* Interfaces */
 interface Props {}
 interface State {}
-interface LoginResponse { token: string }
+interface LoginResponse { token: string, id: string }
 export class Login extends React.PureComponent<Props, State> {
     email: RefObject<Input> = React.createRef();
     password: RefObject<Input> = React.createRef();
@@ -44,6 +44,7 @@ export class Login extends React.PureComponent<Props, State> {
 
         if (res.ok) {
             Cookie.set("token", res.value.token, 31);
+            Cookie.set("user_id", res.value.id, 31);
             window.location.replace("/");
         }else {
             toast(res.error.description);

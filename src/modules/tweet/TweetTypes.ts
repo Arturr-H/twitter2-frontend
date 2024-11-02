@@ -7,6 +7,7 @@ export interface Post {
     replies_to: number | null,
 
     citation: PostCitation | null,
+    created_at: number
 }
 export interface PostWithUser {
     id: number,
@@ -14,6 +15,7 @@ export interface PostWithUser {
     total_likes: number,
     total_replies: number,
     replies_to: number | null,
+    created_at: number,
     
     citation: PostCitation | null,
 

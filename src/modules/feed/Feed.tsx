@@ -6,16 +6,19 @@ import { Backend } from "../../handlers/Backend";
 import { PostWithUser } from "../tweet/TweetTypes";
 import { Text } from "../../components/text/Text";
 import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 /* Interfaces */
 interface Props {
     compose: (reply_to: number | null) => void,
     feed: string,
     title?: string,
-    style?: React.CSSProperties
+    style?: React.CSSProperties,
+    showPostReplies?: true
 }
 interface State {
-    posts: PostWithUser[]
+    posts: PostWithUser[],
+    loading: boolean
 }
 
 export class Feed extends React.PureComponent<Props, State> {
@@ -23,7 +26,8 @@ export class Feed extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            posts: []
+            posts: [],
+            loading: true
         }
 
         this.setFeed = this.setFeed.bind(this);
@@ -34,12 +38,17 @@ export class Feed extends React.PureComponent<Props, State> {
     }
 
     async setFeed(feed: string): Promise<void> {
+        this.setState({ loading: true });
         try {
             this.setState({ posts: [] }, async () => {
-                this.setState({ posts: await this.getFeed(feed) })
+                this.setState({
+                    posts: await this.getFeed(feed),
+                    loading: false
+                })
             })
         }catch (e) {
             toast(`${e}`);
+            this.setState({ loading: false });
         }
     }
     async getFeed(feed: string): Promise<PostWithUser[]> {
@@ -67,10 +76,14 @@ export class Feed extends React.PureComponent<Props, State> {
                         key={"post--" + i}
                         post_content_override={post}
                         compose={this.props.compose}
+                        show_reply={this.props.showPostReplies}
                     />
                     <div className="horizontal-row" />
                 </React.Fragment>)}
 
+                {this.state.loading && <div className="loader-container">
+                    <Loader2 className="loader" size={"1.5rem"} color="#ccc" />    
+                </div>}
             </section>
         );
     }

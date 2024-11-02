@@ -13,6 +13,7 @@ import { Post } from "./pages/post/Post";
 import { Bookmarks } from "./pages/bookmarks/Bookmarks";
 import { Search } from "./pages/search/Search";
 import { SelfProfile } from "./pages/profile/SelfProfile";
+import { PostFeeds } from "./pages/postfeeds/PostFeeds";
 
 /* Interfaces */
 interface Props {}
@@ -22,6 +23,7 @@ interface State {
 }
 
 export default class App extends React.PureComponent<Props, State> {
+    composeOverlay: RefObject<HTMLDivElement> = React.createRef();
 	constructor(props: Props) {
 		super(props);
 
@@ -31,6 +33,9 @@ export default class App extends React.PureComponent<Props, State> {
 		}
 
         this.compose = this.compose.bind(this);
+        this.stopCompose = this.stopCompose.bind(this);
+        this.accountRoutes = this.accountRoutes.bind(this);
+        this.homeRoutes = this.homeRoutes.bind(this);
 	}
 
 	componentDidMount(): void {
@@ -38,7 +43,17 @@ export default class App extends React.PureComponent<Props, State> {
 		if (token === null || token.length === 0) {
 			this.setState({ register: true });
 		}
+
+        if (window.visualViewport) {        
+            window.visualViewport.addEventListener("resize", (_) => this.resizeHandler(this.composeOverlay));
+        }
 	}
+
+    resizeHandler(composeOverlay: RefObject<HTMLDivElement>): void {
+        if (!window.visualViewport || !composeOverlay.current) return;
+
+        composeOverlay.current.style.height = window.visualViewport.height.toString() + "px";;
+    }
 
 	authNeeded(el: JSX.Element): JSX.Element {
 		return this.state.register
@@ -47,49 +62,64 @@ export default class App extends React.PureComponent<Props, State> {
 	}
 
     compose(replies_to: number | null): void {
-        this.setState({ compose: { replies_to } })
+        document.body.style.overflow = "hidden !important";
+        this.setState({ compose: { replies_to } });
     }
+    stopCompose(): void {
+        document.body.style.overflow = "auto";
+        this.setState({ compose: null });
+    }
+
+    /* Account related */
+    accountRoutes = () => <>
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/register" element={<Register />} />
+    </>;
+
+    /* Home related */
+    homeRoutes = () => <Routes>
+        <Route index path="/" element={this.authNeeded(<PostFeeds compose={this.compose} />)} />
+        <Route path="/hashtag/:hashtag" element={<HashtagScene
+            compose={this.compose}
+        />} />
+        <Route path="/bookmarks" element={<Bookmarks compose={this.compose} />} />
+        <Route path="/search" element={<Search compose={this.compose} />} />
+        <Route path="/post/:id" element={<PostScene compose={this.compose} />} />
+        <Route path="/user/:handle" element={<ProfileScene compose={this.compose} />} />
+        <Route path="/profile" element={<SelfProfile compose={this.compose} />} />
+    </Routes>;
 
 	render(): ReactNode {
 		return (
 			<>
 				<Router>
                     <Routes>
-						<Route path="/login" element={<Login />} />
-						<Route path="/sign-up" element={<SignUp />} />
-						<Route path="/register" element={<Register />} />
+                        {this.accountRoutes()}
 
                         {/* All other paths */}
                         <Route path="/*" element={
                             <Home compose={this.compose}>
-                                <Routes>
-                                    <Route index path="/" element={this.authNeeded(<Feed
-                                        compose={this.compose}
-                                        title="What's happening?"
-                                        feed="/feed/newest"
-                                    />)} />
-                                    <Route path="/hashtag/:hashtag" element={<HashtagScene
-                                        compose={this.compose}
-                                    />} />
-                                    <Route path="/bookmarks" element={<Bookmarks />} />
-                                    <Route path="/search" element={<Search />} />
-                                    <Route path="/post/:id" element={<PostScene compose={this.compose} />} />
-                                    <Route path="/user/:handle" element={<ProfileScene />} />
-                                    <Route path="/profile" element={<SelfProfile />} />
-                                </Routes>
+                                {this.homeRoutes()}
                             </Home>
                         } />
 					</Routes>
                     
 
                     {/* Composing overlay */}
-                    {this.state.compose !== null ? <div className="publish-post-overlay">
+                    {this.state.compose !== null
+                    ? <div
+                        className="publish-post-overlay"
+                        ref={this.composeOverlay}
+                    >
                         <Publish
-                            close={() => this.setState({ compose: null })}
+                            close={this.stopCompose}
                             replies_to={this.state.compose.replies_to}
                         />
                     </div> : <></>}
 				</Router>
+
+                {/* Toast notifications */}
 				<Toaster toastOptions={{ "position": "bottom-center" }} />
 			</>
 		)
@@ -107,13 +137,24 @@ function HashtagScene({ compose }: { compose: (n: number|null) => void }) {
     if (hashtag) { return <Feed
         compose={compose}
         ref={ref}
-        feed={FEED_PREFIX + hashtag} title={"#" + hashtag}
+        feed={FEED_PREFIX + hashtag}
+        title={"#" + hashtag}
+        showPostReplies
     /> }
     else { return <p>Not found!</p> }
 }
-function ProfileScene() {
+function ProfileScene({ compose }: { compose: (n: number|null) => void }) {
+    const ref = React.createRef<UserProfile>();
     const { handle } = useParams<{ handle: string }>();
-    if (handle) { return <UserProfile handle={handle} /> }
+    React.useEffect(() => {
+        if (handle) ref.current?.setHandle(handle);
+    });
+
+    if (handle) { return <UserProfile
+        compose={compose}
+        handle={handle}
+        ref={ref}
+    /> }
     else { return <p>Not found!</p> }
 }
 function PostScene({ compose }: { compose: (n: number|null) => void }) {

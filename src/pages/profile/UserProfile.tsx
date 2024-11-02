@@ -9,24 +9,34 @@ import toast from "react-hot-toast";
 /* Interfaces */
 interface Props {
     handle: string,
+    compose: (replies_to: number | null) => void
 }
 interface State {
     user_info: UserInfo | null
 }
 
 export class UserProfile extends React.PureComponent<Props, State> {
+    feed: React.RefObject<Feed> = React.createRef();
     constructor(props: Props) {
         super(props);
 
         this.state = {
             user_info: null
         }
+
+        this.setHandle = this.setHandle.bind(this);
     }
 
     componentDidMount(): void {
-        Backend.get_auth<UserInfo>("/user/handle/" + this.props.handle).then(e => {
+        this.setHandle(this.props.handle);
+    }
+
+    /** Called externally to update this page */
+    setHandle(handle: string): void {
+        Backend.get_auth<UserInfo>("/user/handle/" + handle).then(e => {
             if (e.ok) {
                 this.setState({ user_info: e.value });
+                this.feed.current?.setFeed("/user/posts/" + e.value.user_id);
             }else {
                 toast(e.error.description);
             }
@@ -49,8 +59,10 @@ export class UserProfile extends React.PureComponent<Props, State> {
 
                 <Feed
                     title="Posts"
-                    compose={() => {}}
+                    compose={this.props.compose}
                     feed={"/user/posts/" + this.state.user_info.user_id}
+                    showPostReplies
+                    ref={this.feed}
                 />
             </React.Fragment>
         );

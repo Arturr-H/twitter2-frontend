@@ -7,7 +7,9 @@ import { Button } from "../../components/button/Button";
 import { Search as SearchIcon } from "lucide-react";
 
 /* Interfaces */
-interface Props {}
+interface Props {
+    compose: (replies_to: number | null) => void
+}
 interface State {
     inputContent: string,
 }
@@ -36,18 +38,19 @@ export class Search extends React.PureComponent<Props, State> {
                 <div className="search-bar">
                     <Input
                         onChange={(e) => this.setState({ inputContent: e })}
-                        expand placeholder="Search" type="search" />
+                        expand placeholder="Search" type="search"
+                        focused    
+                    />
                     <Button
                         text=""
                         primary
-                        icon={<SearchIcon color="#fff" strokeWidth={3} />}
+                        icon={<SearchIcon color="#fff" size={"1rem"} strokeWidth={3} />}
                         onClickSync={this.search}
                     />
                 </div>
 
                 <Feed
-                    compose={() => {}}
-                    title="Results"
+                    compose={this.props.compose}
                     feed={FEED_PREFIX + "[]"}
                     ref={this.feedComponent}
                 />

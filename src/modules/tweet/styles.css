@@ -29,14 +29,17 @@
 
     display: flex;
     flex-direction: column;
-    gap: 0.1rem;
 }.tweet > .body > .header {
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+        align-items: center;
 }.tweet > .body > .header > .header-link {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
     text-decoration: none;
+    width: max-content;
 }.tweet > .body > .header .displayname {
     font-size: 20px;
     font-weight: 500;
@@ -44,6 +47,13 @@
     color: #aaa;
     font-size: 20px;
     font-weight: 400;
+}.tweet > .body > .header > .date {
+    display: inline-block;
+    user-select: none;
+    color: #aaa;
+
+    font-family: "Poppins", sans-serif;
+    font-size: 0.7rem;
 }.tweet > .body > .content-container {
     padding: 0;
     margin: 0;
@@ -60,12 +70,12 @@
     
     text-decoration: none;
     font-family: "Manrope";
-}.tweet > .body > .content-container > span.default-text {
+}.tweet > .body > .content-container > span.btext.default-text {
     color: #ccc;
     font-family: "Manrope";
-}.tweet > .body > .content-container > a.hashtag {
+}.tweet > .body > .content-container > a.btext.hashtag {
     color: var(--hashtag-color);
-}.tweet > .body > .content-container > a.mention {
+}.tweet > .body > .content-container > a.btext.mention {
     color: var(--mention-color);
 }.tweet > .body > .content-container > a:hover {
     filter: brightness(90%);
@@ -86,15 +96,33 @@
 
     background: none;
     border: none;
-}.tweet > .body > .action-bar > .item:hover * {
+}.tweet > .body > .action-bar > .item:hover > svg {
     filter: brightness(120%);
-}.tweet > .body > .action-bar > .item:active * {
+}.tweet > .body > .action-bar > .item:active > svg {
     filter: brightness(110%);
 }.tweet > .body > .action-bar > .item > .count {
     font-size: 16px;
     color: #ccc;
 
     user-select: none;
+}
+
+/* Reply view tweet */
+.tweet.reply-view {
+    background: var(--primary-foreground);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    padding: 0.25rem;
+    border: 0.1rem solid var(--border);
+
+    width: 100%;
+    overflow-x: hidden;
+    margin-top: 0.1rem;
+}.tweet.reply-view .sidebar {
+    width: 2.25rem;
+}.tweet.reply-view .header .handle,
+.tweet.reply-view .header .displayname {
+    font-size: 18px;
 }
 
 /* Post citation */

@@ -9,7 +9,7 @@ import { Collapsible } from "../../components/collapsible/Collapsible";
 /* Interfaces */
 interface Props {
     id: number,
-    compose: (post_id: number | null) => void
+    compose: (replies_to: number | null) => void
 }
 interface State {
     post_id: number
@@ -42,7 +42,8 @@ export class Post extends React.PureComponent<Props, State> {
                     <Tweet
                         refDrill={this.tweet}
                         post_id={this.state.post_id}
-                        compose={() => {}}
+                        compose={this.props.compose}
+                        show_reply
                     />
                 </Collapsible>
 

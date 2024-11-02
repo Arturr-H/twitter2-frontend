@@ -1,19 +1,24 @@
-import { Bookmark, Heart, MessageSquare, MoreHorizontal, Reply } from "lucide-react";
+import { Bookmark, Clipboard, Heart, MessageCircleWarningIcon, MessageSquare, MoreHorizontal, Reply, Trash2 } from "lucide-react";
 import React from "react";
 import { OpinionInterface, Opinions } from "./Opinions";
 import { Link } from "react-router-dom";
+import { ContextMenuButton } from "../../components/contextmenubutton/ContextMenuButton";
+import toast from "react-hot-toast";
 
 /* Interfaces */
 interface Props {
     reply: () => void,
     toggleLike: () => void,
     toggleBookmark: () => void,
+    copyText: () => void,
+    delete: () => void,
     total_likes: number,
     total_replies: number,
     post_id: number,
     liked: boolean,
     bookmarked: boolean,
-    opinions: OpinionInterface[]
+    opinions: OpinionInterface[],
+    isOwner: boolean
 }
 interface State {
     likes: number
@@ -137,7 +142,31 @@ export class ActionBar extends React.PureComponent<Props, State> {
                     <Reply color="#ccc" size={"1rem"} />
                 </button>
                 <button className="item" title="More">
-                    <MoreHorizontal color="#ccc" size={"1rem"} />
+                    <ContextMenuButton
+                        buttons={[
+                            {
+                                onClick: this.props.copyText,
+                                text: "Copy text",
+                                icon: <Clipboard size={"0.8rem"} />
+                            },
+                            true,
+                            {
+                                onClick: () => toast("No"),
+                                text: "Report",
+                                icon: <MessageCircleWarningIcon size={"0.8rem"} />,
+                                destructive: true
+                            },
+                            {
+                                onClick: this.props.delete,
+                                text: "Delete",
+                                icon: <Trash2 size={"0.8rem"} />,
+                                destructive: true,
+                                hidden: !this.props.isOwner
+                            }
+                        ]}
+                    >
+                        <MoreHorizontal color="#ccc" size={"1rem"} />
+                    </ContextMenuButton>
                 </button>
             </div>
         )

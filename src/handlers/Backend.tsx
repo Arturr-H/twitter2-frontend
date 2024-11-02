@@ -14,7 +14,7 @@ interface ErrorMessage {
 }
 
 export class Backend {
-    static BACKEND_URL: string = "http://192.168.68.57:8080";
+    static BACKEND_URL: string = "http://37.27.223.90:8080";
 
     /** Tries to fetch backend and convert response
      * into T, else returning ErrorMessage interface */

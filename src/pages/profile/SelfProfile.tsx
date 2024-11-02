@@ -8,7 +8,9 @@ import toast from "react-hot-toast";
 import { Button } from "../../components/button/Button";
 
 /* Interfaces */
-interface Props {}
+interface Props {
+    compose: (replies_to: number | null) => void
+}
 interface State {
     user_info: UserInfo | null,
     profileImageURL?: string
@@ -117,8 +119,9 @@ export class SelfProfile extends React.PureComponent<Props, State> {
                 <div className="horizontal-row" />
 
                 <Feed
-                    compose={() => {}}
+                    compose={this.props.compose}
                     feed={"/user/posts/" + this.state.user_info.user_id}
+                    showPostReplies
                 />
             </React.Fragment>
         );

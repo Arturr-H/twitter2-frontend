@@ -1,0 +1,51 @@
+.ctx-menu-button-container {
+    position: relative;
+    display: inline-block;
+}.ctx-menu-button-container > .ctx-menu-button {
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: center;
+        align-items: center;
+
+    background: none;
+    cursor: pointer;
+}
+.ctx-menu {
+    border: 0.1rem solid var(--border);
+
+    position: absolute;
+    right: 0;
+    z-index: 1;
+
+    background: var(--primary-foreground);
+    box-sizing: border-box;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}.ctx-menu > button {
+    display: flex;
+    flex-direction: row;
+        align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 0.4rem;
+    width: 8rem;
+    border-radius: 0.25rem;
+
+    font-size: 0.8rem;
+
+    border: none;
+    outline: none;
+    background: var(--primary-foreground);
+
+    color: #ccc;
+}.ctx-menu > button.destructive {
+    color: var(--chart-5);
+}.ctx-menu > button:hover {
+    background: var(--border);
+    filter: none;
+}

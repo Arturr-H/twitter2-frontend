@@ -19,6 +19,7 @@ interface Props {
     minlen?: number,
     name?: string,
     onChange?: (value: string) => void,
+    focused?: true,
 
     regexCriteria?: string,
 }
@@ -128,6 +129,7 @@ export class Input extends React.PureComponent<Props, State> {
                     onChange={this.handleChange}
                     value={this.state.value}
                     maxLength={this.props.maxlen ?? 256}
+                    autoFocus={this.props.focused}
                 />
 
                 {this.props.hideable && <button onClick={this.toggleVisibility} className="eye-icon-wrapper">

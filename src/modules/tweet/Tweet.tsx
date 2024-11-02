@@ -11,6 +11,10 @@ import { TweetQuote } from "./TweetQuote";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Text } from "../../components/text/Text";
 import { OpinionInterface } from "./Opinions";
+import { Cookie } from "../../handlers/Cookie";
+
+/* Constants */
+const MAX_REPLY_NESTING = 1;
 
 /* Interfaces */
 interface Props {
@@ -23,6 +27,12 @@ interface Props {
     post_id?: number,
     compose: (reply_to: number | null) => void,
     navigate?: NavigateFunction,
+
+    /** If this post should be scaled down
+     * and not show the action bar */
+    reply_view?: true,
+    show_reply?: true,
+    nest_level?: number
 }
 interface State {
     liked: boolean,
@@ -40,7 +50,9 @@ export class Tweet_ extends React.Component<Props, State> {
 
         this.toggleBookmark = this.toggleBookmark.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
+        this.isOwner = this.isOwner.bind(this);
         this.onClick = this.onClick.bind(this);
+        this.delete = this.delete.bind(this);
         this.reply = this.reply.bind(this);
 
         this.state = {
@@ -135,7 +147,7 @@ export class Tweet_ extends React.Component<Props, State> {
                     <Link
                         to={`/hashtag/${part.substring(1)}`}
                         key={index}
-                        className="hashtag"
+                        className="hashtag btext"
                         onClick={(e) => e.stopPropagation()}
                     >{part}</Link>
                 );
@@ -144,12 +156,12 @@ export class Tweet_ extends React.Component<Props, State> {
                     <Link
                         to={`/user/${part.substring(1)}`}
                         key={index}
-                        className="mention"
+                        className="mention btext"
                         onClick={(e) => e.stopPropagation()}
                     >{part}</Link>
                 );
             } else {
-                return <span key={index} style={{ opacity: hideDefault === true ? 0 : 1 }} className="default-text">{part}</span>;
+                return <span key={index} style={{ opacity: hideDefault === true ? 0 : 1 }} className="default-text btext">{part}</span>;
             }
         });
     }
@@ -174,6 +186,21 @@ export class Tweet_ extends React.Component<Props, State> {
         this.setState({ bookmarked: !this.state.bookmarked })
     }
 
+    /** Delete post */
+    delete(): void {
+        if (!this.state.post_with_user) return;
+        Backend.post_auth("/post/delete", {
+            post_id: this.state.post_with_user.id
+        }).then(e => {
+            if (e.ok) {
+                toast("Post deleted");
+                this.setState({ post_with_user: null });
+            }else{
+                toast(e.error.description);
+            }
+        })
+    }
+
     /** When we press reply in the action bar */
     reply(): void {
         if (!this.state.post_with_user) return;
@@ -190,10 +217,17 @@ export class Tweet_ extends React.Component<Props, State> {
         }
     }
 
+    /** If the user is the owner of this post */
+    isOwner(): boolean {
+        let id = Cookie.get("user_id");
+        if (!id || !this.state.post_with_user) return false;
+        return this.state.post_with_user.poster_id === parseInt(id);
+    }
+    
     render(): React.ReactNode {
         return (
             <div
-                className="tweet"
+                className={`tweet ${this.props.reply_view ? "reply-view" : ""}`}
                 onClick={this.onClick}
             >
                 <TweetSidebar user_id={this.state.post_with_user?.poster_id} />
@@ -203,11 +237,13 @@ export class Tweet_ extends React.Component<Props, State> {
                         displayname={this.state.post_with_user?.displayname ?? null}
                         handle={this.state.post_with_user?.handle ?? null}
                         user_id={this.state.post_with_user?.poster_id ?? null}
+                        created_at={this.state.post_with_user?.created_at ?? null}
                     />
 
                     {/* Citation of another post if exists */}
                     {this.state.post_with_user
                         && this.state.post_with_user.citation
+                        && (this.props.nest_level ?? 0) < MAX_REPLY_NESTING
                         && <Link
                             onClick={(e) => e.stopPropagation()}
                             to={"/post/" + this.state.post_with_user.citation.post_id}
@@ -225,8 +261,30 @@ export class Tweet_ extends React.Component<Props, State> {
                             : <Text.PSkeletalSentence lengths={[6, 4, 10, 8, 9]} />}
                     </div>
 
+
+                    {/* Reply to another post if exists */}
+                    {this.state.post_with_user
+                        && this.state.post_with_user.replies_to
+                        && !this.state.post_with_user.citation
+                        && this.props.show_reply
+                        && (this.props.nest_level ?? 0) < MAX_REPLY_NESTING
+                        && <Link
+                            onClick={(e) => e.stopPropagation()}
+                            to={"/post/" + this.state.post_with_user.replies_to}
+                            style={{ textDecoration: "none" }}
+                        >
+                        <TweetWrapper
+                            post_id={this.state.post_with_user.replies_to}
+                            compose={this.props.compose}
+                            reply_view
+                            nest_level={(this.props.nest_level ?? 0) + 1}
+                        />
+                    </Link>}
+
                     {/* Like, share, reply etc */}
-                    {this.state.action_bar_active && <ActionBar
+                    {this.state.action_bar_active
+                    && !this.props.reply_view
+                    && <ActionBar
                         post_id={this.state.post_with_user?.id ?? -29}
                         opinions={this.state.opinions}
                         liked={this.state.liked}
@@ -236,6 +294,13 @@ export class Tweet_ extends React.Component<Props, State> {
                         total_likes={this.state.total_likes}
                         total_replies={this.state.total_replies}
                         reply={this.reply}
+                        delete={this.delete}
+                        copyText={() => {
+                            if (this.state.post_with_user) {
+                                navigator.clipboard.writeText(this.state.post_with_user.content);
+                            }
+                        }}
+                        isOwner={this.isOwner()}
                     />}
                 </div>
             </div>
@@ -252,6 +317,7 @@ const TweetWrapper = (props: Props & WrapperProps): JSX.Element => {
         {...props}
         ref={props.refDrill}
         navigate={navigate}
+        nest_level={props.nest_level ?? 0}
     />
 }
 
