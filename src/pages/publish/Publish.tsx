@@ -250,6 +250,7 @@ export class Publish extends React.PureComponent<Props, State> {
 
                         <div className="body">
                             <TweetHeader
+                                created_at={this.state.reply_to_post.created_at}
                                 displayname={this.state.reply_to_post.displayname}
                                 handle={this.state.reply_to_post.handle}
                                 user_id={this.state.reply_to_post.poster_id}
