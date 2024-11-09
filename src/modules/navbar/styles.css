@@ -26,6 +26,7 @@ nav.navbar-top {
 
     position: relative;
     height: 100%;
+    width: min-content;
 }nav.navbar-top > .nav-links .profile-image {
     height: 100%;
     border-radius: 50%;
