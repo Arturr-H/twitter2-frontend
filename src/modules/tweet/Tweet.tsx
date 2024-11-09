@@ -230,7 +230,10 @@ export class Tweet_ extends React.Component<Props, State> {
                 className={`tweet ${this.props.reply_view ? "reply-view" : ""}`}
                 onClick={this.onClick}
             >
-                <TweetSidebar user_id={this.state.post_with_user?.poster_id} />
+                <TweetSidebar
+                    user_id={this.state.post_with_user?.poster_id}
+                    handle={this.state.post_with_user?.handle}
+                />
 
                 <div className="body">
                     <TweetHeader

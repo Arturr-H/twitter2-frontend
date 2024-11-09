@@ -10,7 +10,7 @@
 
     padding: 0.3rem;
     box-sizing: border-box;
-}.tweet > .sidebar > .profile-image {
+}.tweet > .sidebar .profile-image {
     width: 100%;
     aspect-ratio: 1;
     border-radius: 50%;
