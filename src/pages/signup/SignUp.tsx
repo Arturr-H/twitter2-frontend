@@ -38,7 +38,7 @@ export class SignUp extends React.PureComponent<Props, State> {
             email = this.email.current?.value();
             password = this.password.current?.value();
         }catch (e) {
-            toast(`${e}`);
+            toast.error(`${e}`);
             return;
         }
 
@@ -53,7 +53,7 @@ export class SignUp extends React.PureComponent<Props, State> {
             Cookie.set("user_id", res.value.id, 31);
             window.location.replace("/");
         }else {
-            toast(res.error.description);
+            toast.error(res.error.description);
         }
     }
 
@@ -68,24 +68,24 @@ export class SignUp extends React.PureComponent<Props, State> {
 
                     <div className="register-input-container">
                         <Input
-                            ref={this.displayname} placeholder="Displayname..."
+                            ref={this.displayname} placeholder="Displayname"
                             type="text" expand required name="displayname"
                             minlen={1} maxlen={24}
                         />
                         <Input
-                            ref={this.handle} placeholder="@handle..."
+                            ref={this.handle} placeholder="@handle"
                             type="text" expand handle required name="handle"
                             regexCriteria="[a-z0-9.]"
                             minlen={3} maxlen={15}
                         />
                         <Input
-                            ref={this.email} placeholder="Email..."
+                            ref={this.email} placeholder="Email"
                             type="email" expand required name="email address"
                             regexCriteria="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                             maxlen={256}
                         />
                         <Input
-                            ref={this.password} placeholder="Password..."
+                            ref={this.password} placeholder="Password"
                             type="password" expand required hideable name="password"
                             minlen={7} maxlen={256}
                         />

@@ -62,12 +62,12 @@ export class Login extends React.PureComponent<Props, State> {
 
                     <div className="register-input-container">
                         <Input
-                            ref={this.email} placeholder="Email..."
+                            ref={this.email} placeholder="Email"
                             type="email" expand required name="email address"
                             regexCriteria="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                         />
                         <Input
-                            ref={this.password} placeholder="Password..."
+                            ref={this.password} placeholder="Password"
                             type="password" expand required hideable name="password"
                         />
                         <Button
