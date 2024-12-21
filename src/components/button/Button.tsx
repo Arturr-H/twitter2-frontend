@@ -13,7 +13,9 @@ interface Props {
     destructive?: true,
     expand?: true,
 
-    icon?: JSX.Element
+    icon?: JSX.Element,
+    width?: string,
+    disabled?: boolean,
 }
 interface State {
     loading: boolean
@@ -38,6 +40,7 @@ export class Button extends React.PureComponent<Props, State> {
 
     /** Runs either the async or sync function if provided */
     async onClick(): Promise<void> {
+        if (this.props.disabled) { return }
         let async_f = this.props.onClickAsync !== undefined;
         let sync_f = this.props.onClickSync !== undefined;
         if (!async_f && !sync_f) { return };
@@ -66,9 +69,13 @@ export class Button extends React.PureComponent<Props, State> {
                     ${this.props.primary && "primary"}
                     ${this.props.destructive && "destructive"}
                     ${this.props.expand && "expand"}
+                    ${this.props.disabled === true && "disabled"}
                 `}
+                style={this.props.width ? { width: this.props.width } : {}}
             >
-                {this.props.icon}
+                <div className="icon-container">
+                    {this.props.icon}
+                </div>
                 {this.state.loading
                     ? <LoaderCircle className="loading-icon" size={24} />
                     : this.props.text}
