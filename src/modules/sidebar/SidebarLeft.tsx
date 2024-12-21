@@ -3,6 +3,7 @@ import React from "react";
 import "./styles.css";
 import { NavButton } from "../../components/button/NavButton";
 import { Bookmark, Home, PenBox, Search, Settings, User } from "lucide-react";
+import toast from "react-hot-toast";
 
 /* Interfaces */
 interface Props {
@@ -26,7 +27,7 @@ export class SidebarLeft extends React.PureComponent<Props, State> {
 
                     <div style={{ flex: 1 }} />
 
-                    <NavButton icon={<Settings size={"1rem"} />} text="Options" />
+                    <NavButton icon={<Settings size={"1rem"} />} text="Options" onClickSync={() => toast("No")} />
                     <NavButton primary icon={<PenBox size={"1rem"} />} text="Compose" onClickSync={() => this.props.compose(null)} />
                 </div>
             </nav>

@@ -2,11 +2,13 @@
 import React from "react";
 import "./styles.css";
 import { Text } from "../../components/text/Text";
-import { Home, Search } from "lucide-react";
+import { DoorOpen, Home, Search, Settings, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { UserInfo } from "../tweet/TweetTypes";
 import { Backend } from "../../handlers/Backend";
 import { Cookie } from "../../handlers/Cookie";
+import { ContextMenuButton } from "../../components/contextmenubutton/ContextMenuButton";
+import toast from "react-hot-toast";
 
 /* Interfaces */
 interface Props {}
@@ -34,6 +36,12 @@ export class Navbar extends React.PureComponent<Props, State> {
         });
     }
 
+    logout(): void {
+        Cookie.erase("user_id");
+        Cookie.erase("token");
+        window.location.href = "/register";
+    }
+
     render(): React.ReactNode {
         return (
             <nav className="navbar-top">
@@ -41,12 +49,24 @@ export class Navbar extends React.PureComponent<Props, State> {
                 <div className="nav-links">
                     <Link to="/"><Home color="#fff" size={"1rem"} strokeWidth={3} /></Link>
                     <Link to="/search"><Search color="#fff" size={"1rem"} strokeWidth={3} /></Link>
-                    <Link to="/profile">
+                    {/* <Link to="/profile"> */}
+                    <ContextMenuButton
+                        buttons={[
+                            { text: "Profile", icon: <User />, onClick: () => window.location.href = "/profile" },
+                            { text: "Settings", icon: <Settings />, onClick: () => toast("No") },
+                            true,
+                            { text: "Logout", icon: <DoorOpen />, onClick: this.logout, destructive: true },
+
+                        ]}
+                        className="profile-ctx-button-wrapper"
+                        buttonClassName="profile-ctx-button"
+                    >
                         <img
                             className="profile-image"
                             src={Backend.profileImage(this.state.user_info?.user_id)}
                         />
-                    </Link>
+                    </ContextMenuButton>
+                    {/* </Link> */}
                 </div>
             </nav>
         );
