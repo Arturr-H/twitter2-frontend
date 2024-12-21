@@ -53,6 +53,7 @@ export class Search extends React.PureComponent<Props, State> {
                     compose={this.props.compose}
                     feed={FEED_PREFIX + "[]"}
                     ref={this.feedComponent}
+                    title="Results"
                 />
             </>
         );

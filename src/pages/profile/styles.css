@@ -33,6 +33,41 @@
     font-weight: 400;
 }
 
+.number-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    border-bottom: 0.1rem solid var(--border);
+    width: 100%;
+
+    box-sizing: border-box;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}.number-info-container > div.number-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}.number-info-container > div.number-info > p.number {
+    font-weight: 700;
+    font-size: 26px;
+}.number-info-container > div.number-info > p.text {
+    color: #ccc;
+    font-size: 20px;
+}.number-info-container > .follow-button-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+        align-items: center;
+}.number-info-container > .follow-button-container button {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
 .profile-image-button-container {
     display: flex;
     flex-direction: row;

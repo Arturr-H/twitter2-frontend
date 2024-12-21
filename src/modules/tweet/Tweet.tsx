@@ -1,5 +1,5 @@
 /* Imports */
-import React from "react";
+import React, { RefObject } from "react";
 import "./styles.css";
 import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
@@ -32,7 +32,9 @@ interface Props {
      * and not show the action bar */
     reply_view?: true,
     show_reply?: true,
-    nest_level?: number
+    nest_level?: number,
+
+    animationIndex?: number
 }
 interface State {
     liked: boolean,
@@ -45,6 +47,8 @@ interface State {
 }
 
 export class Tweet_ extends React.Component<Props, State> {
+    self: RefObject<HTMLDivElement> = React.createRef();
+
     constructor(props: Props) {
         super(props);
 
@@ -66,6 +70,18 @@ export class Tweet_ extends React.Component<Props, State> {
     /* Initialize */
     componentDidMount(): void {
         this.setPostContent();
+
+        /* Animate to visible */
+        if (this.props.animationIndex !== undefined) {
+            setTimeout(() => {
+                if (!this.self.current) return;
+                this.self.current.style.opacity = "1";
+            }, this.props.animationIndex * 40);
+        }else {
+            if (this.self.current) {
+                this.self.current!.style.opacity = "1";
+            }
+        }
     }
 
     /** Sets from override external content or fetches */
@@ -145,7 +161,7 @@ export class Tweet_ extends React.Component<Props, State> {
             if (part.startsWith('#')) {
                 return (
                     <Link
-                        to={`/hashtag/${part.substring(1)}`}
+                        to={`/hashtag/${part.substring(1).toLowerCase()}`}
                         key={index}
                         className="hashtag btext"
                         onClick={(e) => e.stopPropagation()}
@@ -154,7 +170,7 @@ export class Tweet_ extends React.Component<Props, State> {
             } else if (part.startsWith('@')) {
                 return (
                     <Link
-                        to={`/user/${part.substring(1)}`}
+                        to={`/user/${part.substring(1).toLowerCase()}`}
                         key={index}
                         className="mention btext"
                         onClick={(e) => e.stopPropagation()}
@@ -227,7 +243,12 @@ export class Tweet_ extends React.Component<Props, State> {
     render(): React.ReactNode {
         return (
             <div
+                ref={this.self}
                 className={`tweet ${this.props.reply_view ? "reply-view" : ""}`}
+                style={{
+                    animationDelay: `${(this.props.animationIndex ?? 0) / 40}s`,
+                    opacity: this.props.animationIndex !== undefined ? 0 : 1
+                }}
                 onClick={this.onClick}
             >
                 <TweetSidebar
@@ -241,6 +262,7 @@ export class Tweet_ extends React.Component<Props, State> {
                         handle={this.state.post_with_user?.handle ?? null}
                         user_id={this.state.post_with_user?.poster_id ?? null}
                         created_at={this.state.post_with_user?.created_at ?? null}
+                        is_followed={this.state.post_with_user?.is_followed ?? false}
                     />
 
                     {/* Citation of another post if exists */}

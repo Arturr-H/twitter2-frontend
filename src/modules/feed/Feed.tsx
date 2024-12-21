@@ -77,6 +77,7 @@ export class Feed extends React.PureComponent<Props, State> {
                         post_content_override={post}
                         compose={this.props.compose}
                         show_reply={this.props.showPostReplies}
+                        animationIndex={i}
                     />
                     <div className="horizontal-row" />
                 </React.Fragment>)}

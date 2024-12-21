@@ -25,11 +25,15 @@ export interface PostWithUser {
 
     liked: boolean,
     bookmarked: boolean,
+    is_followed: boolean
 }
 export interface UserInfo {
     handle: string,
     displayname: string,
-    user_id: number
+    user_id: number,
+    followers: number,
+    following: number,
+    is_followed: boolean,
 }
 export interface PostMetadata {
     /** If the user which is viewing

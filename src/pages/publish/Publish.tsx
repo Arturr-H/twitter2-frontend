@@ -254,6 +254,7 @@ export class Publish extends React.PureComponent<Props, State> {
                                 displayname={this.state.reply_to_post.displayname}
                                 handle={this.state.reply_to_post.handle}
                                 user_id={this.state.reply_to_post.poster_id}
+                                is_followed={this.state.reply_to_post.is_followed}
                             />
 
                             {this.state.reply_to_post.citation && <TweetQuote

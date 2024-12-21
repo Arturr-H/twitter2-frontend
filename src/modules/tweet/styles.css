@@ -4,6 +4,8 @@
     flex-direction: row;
 
     text-decoration: none;
+
+    transition: opacity 0.2s ease-out;
 }.tweet > .sidebar {
     width: 3rem;
     height: 100%;
@@ -37,6 +39,7 @@
 }.tweet > .body > .header > .header-link {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 0.5rem;
     text-decoration: none;
     width: max-content;

@@ -1,12 +1,14 @@
 import React from "react";
 import { Text } from "../../components/text/Text";
 import { Link } from "react-router-dom";
+import { UserCheck } from "lucide-react";
 
 interface Props {
     displayname: string | null,
     handle: string | null,
     user_id: number | null,
-    created_at: number | null
+    created_at: number | null,
+    is_followed: boolean
 }
 
 /** Will desplay skeletal if null props */
@@ -68,6 +70,15 @@ export class TweetHeader extends React.PureComponent<Props> {
                         <Text.PSkeletal margined length={12} />
                         <Text.PSkeletal margined length={7} />
                     </>}
+
+                    {this.props.is_followed && <div
+                        style={{ height: "min-content", transform: "translateY(0.05rem)" }}
+                        title="You follow this user"
+                    ><UserCheck
+                        size={"0.8rem"}
+                        strokeWidth={2.5}
+                        color="rgb(116, 160, 231)"
+                    /></div>}
                 </Link>
 
                 {this.props.created_at
