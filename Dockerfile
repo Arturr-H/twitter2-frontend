@@ -1,22 +1,17 @@
 # This image will be used in the docker-compose file
 # in hetzner or whatnot
-FROM node:latest as build
-
+FROM node:18-alpine
 WORKDIR /app
-COPY . /app
+COPY package.json .
 
 RUN npm install
+
+RUN npm i -g serve
+
+COPY . .
+
 RUN npm run build
 
-FROM docker.io/nginx:alpine as production
-WORKDIR /usr/share/nginx/
+EXPOSE 8082
 
-RUN rm -rf html
-RUN mkdir html
-
-WORKDIR /
-COPY ./nginx/nginx.conf /etc/nginx
-COPY --from=build ./app/dist /usr/share/nginx/html
-
-EXPOSE 80
-CMD ["nginx","-g","daemon off;"]
+CMD [ "serve", "-p", "8082", "-s", "dist" ]
