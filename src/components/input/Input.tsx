@@ -46,6 +46,7 @@ export class Input extends React.PureComponent<Props, State> {
         this.highlightError = this.highlightError.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.value = this.value.bind(this);
+        this.clear = this.clear.bind(this);
     }
 
     /** Called externally (throws) */
@@ -53,6 +54,11 @@ export class Input extends React.PureComponent<Props, State> {
         try {
             this.checkCriteria();
         }catch (e) {
+            this.self.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center"
+            });
             this.highlightError();
             throw e;
         }
@@ -114,9 +120,15 @@ export class Input extends React.PureComponent<Props, State> {
         this.props.onChange && this.props.onChange(this.value_)
     }
 
+    clear(): void {
+        this.value_ = "";
+        this.setState({ value: this.value_ });
+    }
+
     render(): React.ReactNode {
         return (
             <div className={`input-wrapper ${this.props.expand && "expand"}`} ref={this.self}>
+                {this.state.value !== "" && <p className="input-title">{this.props.placeholder}</p>}
                 <input
                     className={`input
                         ${this.props.hideable && "no-right-padding"}
@@ -132,7 +144,11 @@ export class Input extends React.PureComponent<Props, State> {
                     autoFocus={this.props.focused}
                 />
 
-                {this.props.hideable && <button onClick={this.toggleVisibility} className="eye-icon-wrapper">
+                {this.props.hideable && <button
+                    onClick={this.toggleVisibility}
+                    className="eye-icon-wrapper"
+                    tabIndex={-1}
+                >
                     {this.state.visibleIfHideable
                         ? <EyeOff size={24} color={"#999"} className="eye-icon" />
                         : <Eye size={24} color={"#999"} className="eye-icon" />
