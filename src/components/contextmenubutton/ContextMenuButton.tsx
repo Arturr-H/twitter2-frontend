@@ -8,6 +8,8 @@ interface Props {
 
     /** True indicates a horizonal row */
     buttons: (CtxButton | true)[],
+    className?: string,
+    buttonClassName?: string,
 }
 interface State {
     showMenu: boolean;
@@ -48,11 +50,11 @@ export class ContextMenuButton extends React.PureComponent<Props, State> {
 
     render(): React.ReactNode {
         return (
-            <div className="ctx-menu-button-container">
+            <div className={`ctx-menu-button-container ${this.props.className ?? ""}`}>
                 <button
                     ref={this.buttonRef}
                     onClick={this.handleClick}
-                    className="ctx-menu-button"
+                    className={`ctx-menu-button ${this.props.buttonClassName ?? ""}`}
                 >
                     {this.props.children}
                 </button>
