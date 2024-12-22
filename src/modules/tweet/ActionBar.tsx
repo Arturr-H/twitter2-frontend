@@ -1,9 +1,10 @@
-import { Bookmark, Clipboard, Heart, MessageCircleWarningIcon, MessageSquare, MoreHorizontal, Reply, Trash2 } from "lucide-react";
+import { Bookmark, Clipboard, Heart, MessageCircleWarningIcon, MessageSquare, MoreHorizontal, Reply, TicketPlus, Trash2 } from "lucide-react";
 import React from "react";
 import { OpinionInterface, Opinions } from "./Opinions";
 import { Link } from "react-router-dom";
 import { ContextMenuButton } from "../../components/contextmenubutton/ContextMenuButton";
 import toast from "react-hot-toast";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
@@ -18,7 +19,9 @@ interface Props {
     liked: boolean,
     bookmarked: boolean,
     opinions: OpinionInterface[],
-    isOwner: boolean
+    isOwner: boolean,
+
+    toggleModal: (open: boolean, modal?: Modal) => void
 }
 interface State {
     likes: number
@@ -148,6 +151,14 @@ export class ActionBar extends React.PureComponent<Props, State> {
                                 onClick: this.props.copyText,
                                 text: "Copy text",
                                 icon: <Clipboard size={"0.8rem"} />
+                            },
+                            {
+                                onClick: () => this.props.toggleModal(true, {
+                                    type: "create_opinion",
+                                    post_id: this.props.post_id
+                                }),
+                                text: "Add Opinion",
+                                icon: <TicketPlus size={"0.8rem"} />
                             },
                             true,
                             {

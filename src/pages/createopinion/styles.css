@@ -1,0 +1,25 @@
+.all-opinion-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    max-height: 50vh;
+    margin-bottom: auto;
+
+    padding-bottom: 0.5rem;
+    box-sizing: border-box;
+}.all-opinion-container > button {
+    height: min-content;
+    display: flex;
+    flex-grow: 0;
+}.submit-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    gap: 0.5rem;
+}

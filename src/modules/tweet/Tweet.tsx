@@ -304,6 +304,7 @@ export class Tweet_ extends React.Component<Props, State> {
                         bookmarked={this.state.bookmarked}
                         toggleLike={this.toggleLike}
                         toggleBookmark={this.toggleBookmark}
+                        toggleModal={this.props.toggleModal}
                         total_likes={this.state.total_likes}
                         total_replies={this.state.total_replies}
                         reply={this.reply}

@@ -13,29 +13,35 @@ export interface OpinionInterface {
     votes: number
 }
 export interface OpinionExtraInterface {
-    post_id: number
+    post_id: number,
+    style?: React.CSSProperties,
+    extensive?: true
 }
 
 export class Opinions extends React.PureComponent<Props> {
     render(): React.ReactNode {
         return (
             <div className="opinions">
-                {this.props.opinions.map(e => 
-                    <Opinion post_id={this.props.post_id} {...e} />
-                )}
+                <div className="opinions-wrapper">
+                    {this.props.opinions.map(e => 
+                        <Opinion post_id={this.props.post_id} {...e} />
+                    )}
+                </div>
             </div>
         )
     }
 }
 
 interface OpinionState {
-    active: boolean
+    active: boolean,
+    votes: number
 }
 export class Opinion extends React.PureComponent<OpinionInterface & OpinionExtraInterface, OpinionState> {
     constructor(props: OpinionInterface & OpinionExtraInterface) {
         super(props);
         this.state = {
-            active: this.props.voted
+            active: this.props.voted,
+            votes: this.props.votes
         };
 
         this.onClick = this.onClick.bind(this);
@@ -44,7 +50,10 @@ export class Opinion extends React.PureComponent<OpinionInterface & OpinionExtra
         e.preventDefault();
         e.stopPropagation();
         const active = !this.state.active;
-        this.setState({ active });
+        this.setState({
+            active,
+            votes: this.state.votes + (active ? 1 : -1)
+        });
 
         Backend.post_auth("/post/opinion/set-vote", {
             post_id: this.props.post_id,
@@ -61,10 +70,15 @@ export class Opinion extends React.PureComponent<OpinionInterface & OpinionExtra
             <button
                 onClick={this.onClick}
                 className={`opinion ${this.state.active ? "active" : ""}`}
+                style={this.props.style}
             >
-                <p>
+                <p className="text">
                     {this.props.opinion}
                 </p>
+
+                {this.props.extensive && (
+                    <p className="votes">&nbsp;&nbsp;{this.state.votes}</p>
+                )}
             </button>
         )
     }

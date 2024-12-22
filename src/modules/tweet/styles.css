@@ -173,12 +173,8 @@
 }
 
 .opinions {
-    width: 100%;
-    overflow-x: scroll;
-
     display: flex;
     flex-direction: row;
-    gap: 0.25rem;
     -ms-overflow-style: none;
     scrollbar-width: none;
 
@@ -186,16 +182,25 @@
     box-sizing: border-box;
     padding-left: 0.15rem;
     padding-right: 0.15rem;
+    width: 100%;
+    position: relative;
+    overflow-x: scroll;
 }.opinions::-webkit-scrollbar { 
     display: none;
-}.opinions > .opinion {
+}.opinions > .opinions-wrapper {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    height: 100%;
+}.opinion {
     background: var(--primary-foreground);
     width: min-content;
     height: 100%;
     display: flex;
     justify-content: center;
         align-items: center;
-    
+
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 
@@ -203,7 +208,7 @@
     box-sizing: border-box;
     border-radius: 0.4rem;
     cursor: pointer;
-}.opinions > .opinion > p {
+}.opinion > p.text {
     user-select: none;
     color: #ccc;
     font-weight: 400;
@@ -211,13 +216,24 @@
     font-size: 14px;
 
     transform: translateY(1px);
-}.opinions > .opinion:hover {
+    white-space: nowrap;
+}.opinion:hover {
     background: var(--border-highlight);
-}.opinions > .opinion:hover > p {
+}.opinion:hover > p.text {
     color: #fff;
-}.opinions > .opinion.active {
+}.opinion.active {
     background: var(--chart-1);
     border: 0.1rem solid var(--chart-1-highlight);
-}.opinions > .opinion.active > p {
+}.opinion.active > p.text {
     color: #fff;
+}.opinion > .votes {
+    user-select: none;
+    color: #aaa;
+    font-weight: 400;
+    font-family: "Epilogue";
+    font-size: 14px;
+
+    transform: translateY(1px);
+    white-space: nowrap;
+    margin-left: 0.1rem;
 }
