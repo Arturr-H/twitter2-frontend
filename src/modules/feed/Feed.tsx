@@ -7,10 +7,11 @@ import { PostWithUser } from "../tweet/TweetTypes";
 import { Text } from "../../components/text/Text";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
-    compose: (reply_to: number | null) => void,
+    toggleModal: (open: boolean, modal?: Modal) => void,
     feed: string,
     title?: string,
     style?: React.CSSProperties,
@@ -75,7 +76,7 @@ export class Feed extends React.PureComponent<Props, State> {
                     <Tweet
                         key={"post--" + i}
                         post_content_override={post}
-                        compose={this.props.compose}
+                        toggleModal={this.props.toggleModal}
                         show_reply={this.props.showPostReplies}
                         animationIndex={i}
                     />
@@ -83,7 +84,7 @@ export class Feed extends React.PureComponent<Props, State> {
                 </React.Fragment>)}
 
                 {this.state.loading && <div className="loader-container">
-                    <Loader2 className="loader" size={"1.5rem"} color="#ccc" />    
+                    <Loader2 className="loader" size={"1.5rem"} color="#ccc" />
                 </div>}
             </section>
         );

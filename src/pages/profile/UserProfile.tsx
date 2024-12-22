@@ -7,11 +7,12 @@ import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
 import { Button } from "../../components/button/Button";
 import { UserMinus, UserPlus } from "lucide-react";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
     handle: string,
-    compose: (replies_to: number | null) => void
+    toggleModal: (open: boolean, modal?: Modal) => void,
 }
 interface State {
     user_info: UserInfo | null,
@@ -109,7 +110,7 @@ export class UserProfile extends React.PureComponent<Props, State> {
 
                 <Feed
                     title="Posts"
-                    compose={this.props.compose}
+                    compose={(replies_to) => this.props.toggleModal(false, { type: "publish", replies_to })}
                     feed={"/user/posts/" + this.state.user_info.user_id}
                     showPostReplies
                     ref={this.feed}

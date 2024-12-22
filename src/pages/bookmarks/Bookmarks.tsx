@@ -2,10 +2,11 @@
 import React from "react";
 import "./styles.css";
 import { Feed } from "../../modules/feed/Feed";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
-    compose: (replies_to: number | null) => void
+    toggleModal: (open: boolean, modal?: Modal) => void,
 }
 interface State {}
 
@@ -17,7 +18,7 @@ export class Bookmarks extends React.PureComponent<Props, State> {
     render(): React.ReactNode {
         return (
             <div className="container no-padding">
-                <Feed title="Bookmarks" feed="/post/bookmarks" compose={this.props.compose} />
+                <Feed title="Bookmarks" feed="/post/bookmarks" toggleModal={this.props.toggleModal} />
             </div>
         );
     }

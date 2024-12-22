@@ -6,3 +6,11 @@
     flex-direction: row;
     align-items: center;
 }
+.search-user-list {
+    padding: 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    height: 100%;
+}

@@ -6,10 +6,11 @@ import { UserInfo } from "../../modules/tweet/TweetTypes";
 import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
 import { Button } from "../../components/button/Button";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
-    compose: (replies_to: number | null) => void
+    toggleModal: (open: boolean, modal?: Modal) => void,
 }
 interface State {
     user_info: UserInfo | null,
@@ -119,7 +120,7 @@ export class SelfProfile extends React.PureComponent<Props, State> {
                 <div className="horizontal-row" />
 
                 <Feed
-                    compose={this.props.compose}
+                    compose={() => this.props.toggleModal(true, { type: "publish", replies_to: null })}
                     feed={"/user/posts/" + this.state.user_info.user_id}
                     showPostReplies
                 />

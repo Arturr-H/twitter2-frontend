@@ -11,10 +11,11 @@ import { PostCitation, PostWithUser, UserInfo } from "../../modules/tweet/TweetT
 import { TweetSidebar } from "../../modules/tweet/Sidebar";
 import { TweetHeader } from "../../modules/tweet/Header";
 import { TweetQuote } from "../../modules/tweet/TweetQuote";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
-    close: () => void,
+    toggleModal: (open: boolean, modal?: Modal) => void,
     replies_to: number | null
 }
 interface State {
@@ -73,7 +74,7 @@ export class Publish extends React.PureComponent<Props, State> {
         });
 
         if (response.ok) {
-            this.props.close();
+            this.props.toggleModal(false);
         } else {
             toast(response.error.description)
         }
@@ -88,7 +89,7 @@ export class Publish extends React.PureComponent<Props, State> {
         });
         /* Esc */
         document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") this.props.close();
+            if (e.key === "Escape") this.props.toggleModal(false);
         });
 
         Backend.get_auth<UserInfo>("/user/profile").then(e => {
@@ -230,7 +231,7 @@ export class Publish extends React.PureComponent<Props, State> {
 
                     <button
                         className="close-button"
-                        onClick={this.props.close}
+                        onClick={() => this.props.toggleModal(false)}
                     >
                         <X strokeWidth={3} size={"0.75rem"} color="#fff" />
                     </button>

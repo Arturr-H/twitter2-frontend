@@ -5,11 +5,12 @@ import { Feed } from "../../modules/feed/Feed";
 import { Tweet, Tweet_ } from "../../modules/tweet/Tweet";
 import { Button } from "../../components/button/Button";
 import { Collapsible } from "../../components/collapsible/Collapsible";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
     id: number,
-    compose: (replies_to: number | null) => void
+    toggleModal: (open: boolean, modal?: Modal) => void,
 }
 interface State {
     post_id: number
@@ -42,7 +43,7 @@ export class Post extends React.PureComponent<Props, State> {
                     <Tweet
                         refDrill={this.tweet}
                         post_id={this.state.post_id}
-                        compose={this.props.compose}
+                        toggleModal={this.props.toggleModal}
                         show_reply
                     />
                 </Collapsible>
@@ -51,7 +52,7 @@ export class Post extends React.PureComponent<Props, State> {
                     style={{ display: "flex", flex: 1 }}
                     title="Replies"
                     feed={`/feed/replies/${this.state.post_id}`}
-                    compose={this.props.compose}
+                    toggleModal={this.props.toggleModal}
                     ref={this.feed}
                 />
 
@@ -59,7 +60,7 @@ export class Post extends React.PureComponent<Props, State> {
                     <Button
                         primary
                         expand
-                        onClickSync={() => this.props.compose(this.props.id)}
+                        onClickSync={() => this.props.toggleModal(true)}
                         text="Reply" />
                 </div>
             </>

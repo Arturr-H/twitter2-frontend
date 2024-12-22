@@ -5,24 +5,8 @@ section.feed-wrapper {
     height: calc(100% - var(--navbar-height));
 }
 
-.publish-post-overlay {
-    top: 0;
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-
-    backdrop-filter: blur(5px) brightness(50%);
-    opacity: 0;
-    animation: publish-post-overlay-intro 0.1s ease-in-out forwards;
-}
-
 .dynamic-home-content-container {
     flex-direction: column;
     display: flex;
     flex: 1;
-}
-
-@keyframes publish-post-overlay-intro {
-    from { opacity: 0; }
-    to { opacity: 1; }
 }

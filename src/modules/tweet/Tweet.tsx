@@ -12,6 +12,7 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { Text } from "../../components/text/Text";
 import { OpinionInterface } from "./Opinions";
 import { Cookie } from "../../handlers/Cookie";
+import { Modal } from "../../Modal";
 
 /* Constants */
 const MAX_REPLY_NESTING = 1;
@@ -25,7 +26,7 @@ interface Props {
 
     /** Make this tweet fetch its own content */
     post_id?: number,
-    compose: (reply_to: number | null) => void,
+    toggleModal: (open: boolean, modal?: Modal) => void,
     navigate?: NavigateFunction,
 
     /** If this post should be scaled down
@@ -204,7 +205,10 @@ export class Tweet_ extends React.Component<Props, State> {
     /** When we press reply in the action bar */
     reply(): void {
         if (!this.state.post_with_user) return;
-        this.props.compose(this.state.post_with_user.id);
+        this.props.toggleModal(true, {
+            type: "publish",
+            replies_to: this.state.post_with_user.id
+        });
     }
 
     /** Navigate to post */
@@ -284,7 +288,7 @@ export class Tweet_ extends React.Component<Props, State> {
                         >
                         <TweetWrapper
                             post_id={this.state.post_with_user.replies_to}
-                            compose={this.props.compose}
+                            toggleModal={this.props.toggleModal}
                             reply_view
                             nest_level={(this.props.nest_level ?? 0) + 1}
                         />

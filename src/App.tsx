@@ -14,26 +14,26 @@ import { Bookmarks } from "./pages/bookmarks/Bookmarks";
 import { Search } from "./pages/search/Search";
 import { SelfProfile } from "./pages/profile/SelfProfile";
 import { PostFeeds } from "./pages/postfeeds/PostFeeds";
+import { Modal } from "./Modal";
 
 /* Interfaces */
 interface Props {}
 interface State {
 	register: boolean,
-    compose: { replies_to: number | null } | null
+    modal: Modal | null
 }
 
 export default class App extends React.PureComponent<Props, State> {
-    composeOverlay: RefObject<HTMLDivElement> = React.createRef();
+    modalOverlay: RefObject<HTMLDivElement> = React.createRef();
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			register: false,
-            compose: null
+            modal: null
 		}
 
-        this.compose = this.compose.bind(this);
-        this.stopCompose = this.stopCompose.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
         this.accountRoutes = this.accountRoutes.bind(this);
         this.homeRoutes = this.homeRoutes.bind(this);
 	}
@@ -45,14 +45,14 @@ export default class App extends React.PureComponent<Props, State> {
 		}
 
         if (window.visualViewport) {        
-            window.visualViewport.addEventListener("resize", (_) => this.resizeHandler(this.composeOverlay));
+            window.visualViewport.addEventListener("resize", (_) => this.resizeHandler(this.modalOverlay));
         }
 	}
 
-    resizeHandler(composeOverlay: RefObject<HTMLDivElement>): void {
-        if (!window.visualViewport || !composeOverlay.current) return;
+    resizeHandler(modalOverlay: RefObject<HTMLDivElement>): void {
+        if (!window.visualViewport || !modalOverlay.current) return;
 
-        composeOverlay.current.style.height = window.visualViewport.height.toString() + "px";;
+        modalOverlay.current.style.height = window.visualViewport.height.toString() + "px";;
     }
 
 	authNeeded(el: JSX.Element): JSX.Element {
@@ -61,13 +61,23 @@ export default class App extends React.PureComponent<Props, State> {
 			: el
 	}
 
-    compose(replies_to: number | null): void {
-        document.body.style.overflow = "hidden !important";
-        this.setState({ compose: { replies_to } });
-    }
-    stopCompose(): void {
-        document.body.style.overflow = "auto";
-        this.setState({ compose: null });
+    toggleModal(open: boolean, modal?: Modal): void {
+        if (open) {
+            document.body.style.overflow = "hidden !important";
+        }else {
+            document.body.style.overflow = "auto";
+        }
+
+        if (!modal) return this.setState({ modal: null });
+        switch (modal.type) {
+            case "publish":
+                this.setState({ modal: open
+                    ? { type: "publish", replies_to: modal.replies_to }
+                    : null });
+                break;
+            default:
+                break;
+        }
     }
 
     /* Account related */
@@ -79,15 +89,15 @@ export default class App extends React.PureComponent<Props, State> {
 
     /* Home related */
     homeRoutes = () => <Routes>
-        <Route index path="/" element={this.authNeeded(<PostFeeds compose={this.compose} />)} />
+        <Route index path="/" element={this.authNeeded(<PostFeeds toggleModal={this.toggleModal} />)} />
         <Route path="/hashtag/:hashtag" element={<HashtagScene
-            compose={this.compose}
+            toggleModal={this.toggleModal}
         />} />
-        <Route path="/bookmarks" element={<Bookmarks compose={this.compose} />} />
-        <Route path="/search" element={<Search compose={this.compose} />} />
-        <Route path="/post/:id" element={<PostScene compose={this.compose} />} />
-        <Route path="/user/:handle" element={<ProfileScene compose={this.compose} />} />
-        <Route path="/profile" element={<SelfProfile compose={this.compose} />} />
+        <Route path="/bookmarks" element={<Bookmarks toggleModal={this.toggleModal} />} />
+        <Route path="/search" element={<Search toggleModal={this.toggleModal} />} />
+        <Route path="/post/:id" element={<PostScene toggleModal={this.toggleModal} />} />
+        <Route path="/user/:handle" element={<ProfileScene toggleModal={this.toggleModal} />} />
+        <Route path="/profile" element={<SelfProfile toggleModal={this.toggleModal} />} />
     </Routes>;
 
 	render(): ReactNode {
@@ -99,7 +109,7 @@ export default class App extends React.PureComponent<Props, State> {
 
                         {/* All other paths */}
                         <Route path="/*" element={
-                            <Home compose={this.compose}>
+                            <Home toggleModal={this.toggleModal}>
                                 {this.homeRoutes()}
                             </Home>
                         } />
@@ -107,15 +117,17 @@ export default class App extends React.PureComponent<Props, State> {
                     
 
                     {/* Composing overlay */}
-                    {this.state.compose !== null
+                    {this.state.modal !== null
                     ? <div
-                        className="publish-post-overlay"
-                        ref={this.composeOverlay}
+                        className="modal-overlay"
+                        ref={this.modalOverlay}
                     >
-                        <Publish
-                            close={this.stopCompose}
-                            replies_to={this.state.compose.replies_to}
+                        {this.state.modal.type === "publish"
+                        ? <Publish
+                            replies_to={this.state.modal.replies_to}
+                            toggleModal={this.toggleModal}
                         />
+                        : <></>}
                     </div> : <></>}
 				</Router>
 
@@ -126,7 +138,7 @@ export default class App extends React.PureComponent<Props, State> {
 	}
 }
 
-function HashtagScene({ compose }: { compose: (n: number|null) => void }) {
+function HashtagScene({ toggleModal }: { toggleModal: (open: boolean, modal?: Modal) => void }) {
     const FEED_PREFIX = "/feed/hashtag/single/";
     const { hashtag } = useParams<{ hashtag: string }>();
     const ref: RefObject<Feed> = React.createRef();
@@ -135,7 +147,7 @@ function HashtagScene({ compose }: { compose: (n: number|null) => void }) {
     }, [hashtag]);
 
     if (hashtag) { return <Feed
-        compose={compose}
+        toggleModal={toggleModal}
         ref={ref}
         feed={FEED_PREFIX + hashtag}
         title={"#" + hashtag}
@@ -143,7 +155,7 @@ function HashtagScene({ compose }: { compose: (n: number|null) => void }) {
     /> }
     else { return <p>Not found!</p> }
 }
-function ProfileScene({ compose }: { compose: (n: number|null) => void }) {
+function ProfileScene({ toggleModal }: { toggleModal: (open: boolean, modal?: Modal) => void }) {
     const ref = React.createRef<UserProfile>();
     const { handle } = useParams<{ handle: string }>();
     React.useEffect(() => {
@@ -151,13 +163,13 @@ function ProfileScene({ compose }: { compose: (n: number|null) => void }) {
     });
 
     if (handle) { return <UserProfile
-        compose={compose}
+        toggleModal={toggleModal}
         handle={handle}
         ref={ref}
     /> }
     else { return <p>Not found!</p> }
 }
-function PostScene({ compose }: { compose: (n: number|null) => void }) {
+function PostScene({ toggleModal }: { toggleModal: (open: boolean, modal?: Modal) => void }) {
     const ref = React.createRef<Post>();
     const { id } = useParams<{ id: string }>();
 
@@ -167,7 +179,7 @@ function PostScene({ compose }: { compose: (n: number|null) => void }) {
     });
 
     if (id_ && !Number.isNaN(id_)) {
-        return <Post ref={ref} compose={compose} id={id_} />
+        return <Post ref={ref} toggleModal={toggleModal} id={id_} />
     }
     else { return <p>Not found!</p> }
 }

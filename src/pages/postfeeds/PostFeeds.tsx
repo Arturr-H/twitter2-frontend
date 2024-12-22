@@ -3,10 +3,11 @@ import React from "react";
 import "./styles.css";
 import { Feed } from "../../modules/feed/Feed";
 import { Flame, History, Sparkle } from "lucide-react";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
-    compose: (replies_to: number | null) => void
+    toggleModal: (open: boolean, modal?: Modal) => void,
 }
 interface State {
     feedType: FeedType;
@@ -77,7 +78,7 @@ export class PostFeeds extends React.PureComponent<Props, State> {
 
                 <Feed
                     ref={this.feed}
-                    compose={this.props.compose}
+                    toggleModal={this.props.toggleModal}
                     title="What's happening?"
                     feed="/feed/newest"
                 />

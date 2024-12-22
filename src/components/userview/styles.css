@@ -1,0 +1,33 @@
+.user-view {
+    width: 100%;
+    height: 5rem;
+
+    box-sizing: border-box;
+    padding: 1rem;
+    border-bottom: 0.1rem solid var(--accent);
+
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}.user-view:hover {
+    background: var(--accent);
+}.user-view > img {
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}.user-view > .user-info {
+    display: flex;
+    flex-direction: column;
+}.user-view > .user-info > .upper,
+.user-view > .user-info > .lower {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}.user-view > .user-info .displayname {
+    font-size: 1rem;
+    font-weight: 500;
+}.user-view > .user-info .handle {
+    color: #aaa;
+    font-size: 1rem;
+    font-weight: 400;
+}

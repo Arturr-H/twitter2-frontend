@@ -6,11 +6,12 @@ import { SidebarLeft } from "../../modules/sidebar/SidebarLeft";
 import { SidebarRight } from "../../modules/sidebar/SidebarRight";
 import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
+import { Modal } from "../../Modal";
 
 /* Interfaces */
 interface Props {
     children: JSX.Element | JSX.Element[],
-    compose: (r: number | null) => void
+    toggleModal: (open: boolean, modal?: Modal) => void,
 }
 interface State {
     replies_to: number | null,
@@ -39,7 +40,7 @@ export class Home extends React.PureComponent<Props, State> {
     }
 
     toggleCompose(replies_to: number | null): void {
-        this.props.compose(replies_to);
+        this.props.toggleModal(true, { type: "publish", replies_to });
     }
 
     async getTrendingHashtags(): Promise<void> {
