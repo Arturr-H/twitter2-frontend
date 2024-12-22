@@ -1,10 +1,13 @@
 import React from "react";
 import { Backend } from "../../handlers/Backend";
 import toast from "react-hot-toast";
+import { TicketPlus } from "lucide-react";
+import { Modal } from "../../Modal";
 
 interface Props {
     opinions: OpinionInterface[],
-    post_id: number
+    post_id: number,
+    toggleModal: (open: boolean, modal?: Modal) => void
 }
 export interface OpinionInterface {
     opinion: string,
@@ -19,6 +22,20 @@ export interface OpinionExtraInterface {
 }
 
 export class Opinions extends React.PureComponent<Props> {
+    constructor(props: Props) {
+        super(props);
+        this.addOpinion = this.addOpinion.bind(this);
+    }
+
+    addOpinion(e: React.MouseEvent<HTMLButtonElement>): void {
+        e.stopPropagation();
+
+        this.props.toggleModal(true, {
+            type: "create_opinion",
+            post_id: this.props.post_id
+        });
+    }
+
     render(): React.ReactNode {
         return (
             <div className="opinions">
@@ -26,6 +43,14 @@ export class Opinions extends React.PureComponent<Props> {
                     {this.props.opinions.map(e => 
                         <Opinion post_id={this.props.post_id} {...e} />
                     )}
+
+                    <button
+                        className="item"
+                        title="Reply"
+                        onClick={this.addOpinion}
+                    >
+                        <TicketPlus color="#555" size={"1rem"} />
+                    </button>
                 </div>
             </div>
         )

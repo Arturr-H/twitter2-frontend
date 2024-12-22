@@ -120,6 +120,7 @@ export class ActionBar extends React.PureComponent<Props, State> {
                 ? <Opinions
                     opinions={this.props.opinions}
                     post_id={this.props.post_id}
+                    toggleModal={this.props.toggleModal}
                 />
                 : <div style={{ flex: 1 }} />}
 

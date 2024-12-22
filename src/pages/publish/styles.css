@@ -1,4 +1,4 @@
-.row-space.publish > .close-button {
+.close-button {
     border: 0.1rem solid var(--border);
     background: var(--primary-foreground);
 
@@ -11,7 +11,7 @@
     border-radius: 50%;
     cursor: pointer;
     transition: background 0.05s ease-in-out;
-}.row-space.publish > .close-button:hover {
+}.close-button:hover {
     background: var(--border);
 }
 

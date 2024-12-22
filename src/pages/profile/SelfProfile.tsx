@@ -120,7 +120,7 @@ export class SelfProfile extends React.PureComponent<Props, State> {
                 <div className="horizontal-row" />
 
                 <Feed
-                    compose={() => this.props.toggleModal(true, { type: "publish", replies_to: null })}
+                    toggleModal={this.props.toggleModal}
                     feed={"/user/posts/" + this.state.user_info.user_id}
                     showPostReplies
                 />

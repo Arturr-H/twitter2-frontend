@@ -11,6 +11,8 @@ import { TweetHeader } from "../../modules/tweet/Header";
 import { Opinion, OpinionInterface } from "../../modules/tweet/Opinions";
 import { Input } from "../../components/input/Input";
 import { Button } from "../../components/button/Button";
+import { TicketPlus, X } from "lucide-react";
+import { Text } from "../../components/text/Text";
 
 /* Interfaces */
 interface Props {
@@ -98,6 +100,25 @@ export class CreateOpinion extends React.PureComponent<Props, State> {
 
         return (
             <div className="modal-page">
+                <div className="row-space publish">
+                    <div style={{
+                        flexDirection: "row",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                    }}>
+                        <TicketPlus color="#fff" strokeWidth={2} />
+                        <Text.H3 text="Create Opinion" />
+                    </div>
+
+                    <button
+                        className="close-button"
+                        onClick={() => this.props.toggleModal(false)}
+                    >
+                        <X strokeWidth={3} size={"0.75rem"} color="#fff" />
+                    </button>
+                </div>
+
                 {tweet !== null ? <div
                     className="post-reply-container"
                 >
