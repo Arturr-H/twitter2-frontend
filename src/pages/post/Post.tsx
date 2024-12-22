@@ -60,7 +60,7 @@ export class Post extends React.PureComponent<Props, State> {
                     <Button
                         primary
                         expand
-                        onClickSync={() => this.props.toggleModal(true)}
+                        onClickSync={() => this.props.toggleModal(true, { type: "publish", replies_to: this.state.post_id })}
                         text="Reply" />
                 </div>
             </>

@@ -15,6 +15,7 @@ import { Search } from "./pages/search/Search";
 import { SelfProfile } from "./pages/profile/SelfProfile";
 import { PostFeeds } from "./pages/postfeeds/PostFeeds";
 import { Modal } from "./Modal";
+import { CreateOpinion } from "./pages/createopinion/CreateOpinion";
 
 /* Interfaces */
 interface Props {}
@@ -68,16 +69,7 @@ export default class App extends React.PureComponent<Props, State> {
             document.body.style.overflow = "auto";
         }
 
-        if (!modal) return this.setState({ modal: null });
-        switch (modal.type) {
-            case "publish":
-                this.setState({ modal: open
-                    ? { type: "publish", replies_to: modal.replies_to }
-                    : null });
-                break;
-            default:
-                break;
-        }
+        this.setState({ modal: modal ?? null });
     }
 
     /* Account related */
@@ -126,6 +118,11 @@ export default class App extends React.PureComponent<Props, State> {
                         ? <Publish
                             replies_to={this.state.modal.replies_to}
                             toggleModal={this.toggleModal}
+                        />
+                        : this.state.modal.type === "create_opinion"
+                        ? <CreateOpinion
+                            toggleModal={this.toggleModal}
+                            post_id={this.state.modal.post_id}
                         />
                         : <></>}
                     </div> : <></>}

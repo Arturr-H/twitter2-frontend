@@ -1,13 +1,4 @@
-.publish-page {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    flex-direction: column;
-}.publish-page > .row-space.publish > .close-button {
+.row-space.publish > .close-button {
     border: 0.1rem solid var(--border);
     background: var(--primary-foreground);
 
@@ -20,22 +11,8 @@
     border-radius: 50%;
     cursor: pointer;
     transition: background 0.05s ease-in-out;
-}.publish-page > .row-space.publish > .close-button:hover {
+}.row-space.publish > .close-button:hover {
     background: var(--border);
-}
-
-.publish-page>.publish-container {
-    width: min(70vh, 70vw);
-    min-height: min(50vh, 50vw);
-    background: var(--primary-foreground);
-    border: 0.1rem solid var(--border);
-    border-radius: 1rem;
-
-    box-sizing: border-box;
-    padding: 0.5rem;
-
-    display: flex;
-    flex-direction: column;
 }
 
 .row-space.publish {

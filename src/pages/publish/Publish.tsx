@@ -209,7 +209,7 @@ export class Publish extends React.PureComponent<Props, State> {
 
     render(): React.ReactNode {
         return (
-            <div className="publish-page">
+            <div className="modal-page">
                 <div className="row-space publish">
                     <div style={{
                         flexDirection: "row",
@@ -280,7 +280,7 @@ export class Publish extends React.PureComponent<Props, State> {
                     </div>
                 </div> : null}
 
-                <div className="publish-container">
+                <div className="modal-container">
                     <div className="publish-tweet">
                         <div className="sidebar">
                             <img
