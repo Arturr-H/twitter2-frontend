@@ -22,6 +22,7 @@ interface Props {
     focused?: true,
 
     regexCriteria?: string,
+    legendTitle?: boolean
 }
 interface State {
     visibleIfHideable: boolean,
@@ -128,7 +129,9 @@ export class Input extends React.PureComponent<Props, State> {
     render(): React.ReactNode {
         return (
             <div className={`input-wrapper ${this.props.expand && "expand"}`} ref={this.self}>
-                {this.state.value !== "" && <p className="input-title">{this.props.placeholder}</p>}
+                {this.state.value !== ""
+                    && this.props.legendTitle !== false
+                    && <p className="input-title">{this.props.placeholder}</p>}
                 <input
                     className={`input
                         ${this.props.hideable && "no-right-padding"}
