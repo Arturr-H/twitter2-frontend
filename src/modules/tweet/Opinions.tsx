@@ -8,8 +8,9 @@ interface Props {
 }
 export interface OpinionInterface {
     opinion: string,
-    id: number,
+    opinion_id: number,
     voted: boolean,
+    votes: number
 }
 export interface OpinionExtraInterface {
     post_id: number
@@ -48,7 +49,7 @@ export class Opinion extends React.PureComponent<OpinionInterface & OpinionExtra
         Backend.post_auth("/post/opinion/set-vote", {
             post_id: this.props.post_id,
             vote: active,
-            opinion_id: this.props.id
+            opinion_id: this.props.opinion_id
         }).then(e => {
             if (!e.ok) {
                 toast(e.error.description)

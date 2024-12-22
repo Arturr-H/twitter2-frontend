@@ -1,3 +1,5 @@
+import { OpinionInterface } from "./Opinions"
+
 export interface Post {
     id: number,
     content: string,
@@ -25,7 +27,9 @@ export interface PostWithUser {
 
     liked: boolean,
     bookmarked: boolean,
-    is_followed: boolean
+    is_followed: boolean,
+
+    top_opinions: OpinionInterface[]
 }
 export interface UserInfo {
     handle: string,

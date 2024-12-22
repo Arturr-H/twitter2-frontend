@@ -172,7 +172,6 @@
     margin-right: 0.5rem;
 }
 
-
 .opinions {
     width: 100%;
     overflow-x: scroll;
@@ -183,7 +182,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 
-    mask: linear-gradient(to right, transparent 0%, white 2%, white 98%, transparent 100%);
+    mask: linear-gradient(to right, transparent 0%, white 1%, white 99%, transparent 100%);
     box-sizing: border-box;
     padding-left: 0.15rem;
     padding-right: 0.15rem;

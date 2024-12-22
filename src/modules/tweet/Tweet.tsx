@@ -41,7 +41,7 @@ interface State {
     bookmarked: boolean,
     total_likes: number,
     total_replies: number,
-    opinions: OpinionInterface[],
+    top_opinions: OpinionInterface[],
     action_bar_active: boolean,
     post_with_user: PostWithUser | null
 }
@@ -62,7 +62,7 @@ export class Tweet_ extends React.Component<Props, State> {
         this.state = {
             action_bar_active: false, liked: false,
             bookmarked: false, total_likes: 0, total_replies: 0,
-            opinions: [],
+            top_opinions: [],
             post_with_user: null
         }
     }
@@ -94,23 +94,23 @@ export class Tweet_ extends React.Component<Props, State> {
             if (post_id !== undefined) {
                 let post_with_user
                     = await Tweet_.fetchContent(post_id);
-                let  { liked, bookmarked, total_likes, total_replies }
+                let  { liked, bookmarked, total_likes,
+                        total_replies, top_opinions }
                     = post_with_user;
 
                 this.setState({
                     liked, bookmarked, total_likes, total_replies,
-                    opinions: await Tweet_.getOpinions(post_id),
-                    action_bar_active: true, post_with_user
+                    action_bar_active: true, post_with_user,
+                    top_opinions
                 });
             }
             /* External input */
             else if (post_content_override !== undefined) {
-                let { liked, bookmarked, total_likes, total_replies, id }
+                let { liked, bookmarked, total_likes, total_replies, top_opinions }
                     = post_content_override;
                 this.setState({
                     liked, bookmarked, total_likes, total_replies,
-                    opinions: await Tweet_.getOpinions(id),
-                    action_bar_active: true,
+                    action_bar_active: true, top_opinions,
                     post_with_user: post_content_override
                 })
             }
@@ -120,22 +120,6 @@ export class Tweet_ extends React.Component<Props, State> {
                 throw new Error("No content provided for post")
             }
         }
-    }
-
-    /** Returns a list of opinions */
-    public static async getOpinions(_post_id: number): Promise<OpinionInterface[]> {
-        return []
-        // return Backend.get_auth<OpinionInterface[]>("/post/opinion/get-opinions/" + post_id).then(e => {
-        //     if (e.ok) {
-        //         return e.value;
-        //     }else {
-        //         toast(e.error.description);
-        //         return []
-        //     }
-        // }).catch(e => {
-        //     toast(e);
-        //     return []
-        // });
     }
 
     /** Fetch tweet content */
@@ -311,7 +295,7 @@ export class Tweet_ extends React.Component<Props, State> {
                     && !this.props.reply_view
                     && <ActionBar
                         post_id={this.state.post_with_user?.id ?? -29}
-                        opinions={this.state.opinions}
+                        opinions={this.state.top_opinions}
                         liked={this.state.liked}
                         bookmarked={this.state.bookmarked}
                         toggleLike={this.toggleLike}
