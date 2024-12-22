@@ -92,6 +92,15 @@
     color: var(--foreground);
 }
 
+@media screen and (max-width: 800px) {
+    .navbutton {
+        justify-content: center;
+    }
+    .navbutton > p {
+        display: none;
+    }
+}
+
 @keyframes loading-icon {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }

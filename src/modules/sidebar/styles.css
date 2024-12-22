@@ -42,17 +42,20 @@ nav.sidebar-right {
 }
 
 /* Sync sidebar left and navbutton */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     nav.sidebar-left {
         width: min-content !important;
     }
 }
 
 @media screen and (max-width: 900px) {
+    nav.sidebar-left {
+        width: 30%;
+    }
+}
+@media screen and (max-width: 1400px) {
     nav.sidebar-right {
         display: none;
-    }nav.sidebar-left {
-        width: 30%;
     }
 }
 @media screen and (min-width: 1250px) {
