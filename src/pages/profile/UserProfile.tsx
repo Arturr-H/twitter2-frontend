@@ -110,7 +110,7 @@ export class UserProfile extends React.PureComponent<Props, State> {
 
                 <Feed
                     title="Posts"
-                    compose={(replies_to) => this.props.toggleModal(false, { type: "publish", replies_to })}
+                    toggleModal={this.props.toggleModal}
                     feed={"/user/posts/" + this.state.user_info.user_id}
                     showPostReplies
                     ref={this.feed}

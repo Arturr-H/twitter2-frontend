@@ -46,7 +46,7 @@ export class Opinions extends React.PureComponent<Props> {
 
                     <button
                         className="item"
-                        title="Reply"
+                        title="Create opinion"
                         onClick={this.addOpinion}
                     >
                         <TicketPlus color="#555" size={"1rem"} />
