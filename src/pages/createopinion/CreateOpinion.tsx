@@ -21,7 +21,8 @@ interface Props {
 }
 interface State {
     tweet: PostWithUser | null,
-    opinions: OpinionInterface[] | null
+    opinions: OpinionInterface[] | null,
+    loadingOpinions: boolean
 }
 
 export class CreateOpinion extends React.PureComponent<Props, State> {
@@ -31,7 +32,8 @@ export class CreateOpinion extends React.PureComponent<Props, State> {
 
         this.state = {
             tweet: null,
-            opinions: null
+            opinions: null,
+            loadingOpinions: true
         };
 
         this.getTweetInfo = this.getTweetInfo.bind(this);
@@ -39,6 +41,8 @@ export class CreateOpinion extends React.PureComponent<Props, State> {
     }
 
     async getTweetInfo(): Promise<void> {
+        this.setState({ loadingOpinions: true });
+
         Backend.get_auth<PostWithUser>("/post/id/" + this.props.post_id).then(e => {
             if (e.ok) {
                 this.setState({ tweet: e.value });
@@ -50,37 +54,37 @@ export class CreateOpinion extends React.PureComponent<Props, State> {
         Backend.get_auth<OpinionInterface[]>("/post/opinion/get-opinions/" + this.props.post_id).then(e => {
             if (e.ok) {
                 console.log(e.value[0]);
-                this.setState({ opinions: e.value });
+                this.setState({ opinions: e.value, loadingOpinions: false });
             } else {
                 toast(e.error.description);
             }
         });
     }
 
-    async submitOpinion(): Promise<void> {
+    submitOpinion(): void {
         const URL = "/post/opinion/create";
         const input = this.input.current?.value();
 
-        if (input === "") {
+        if (input === null) {
             toast("Are you really that speechless?");
             return;
-        }else if (input === null) {
-            return;
         }
 
-        const response = await Backend.post_auth(URL, {
+        this.setState({ loadingOpinions: true });
+
+        Backend.post_auth(URL, {
             post_id: this.props.post_id,
             opinion: input
+        }).then(response => {
+            if (response.ok) {
+                this.setState({ opinions: null }, () => {
+                    this.getTweetInfo();
+                });
+                this.input.current?.clear();
+            } else {
+                toast(response.error.description);
+            }
         });
-
-        if (response.ok) {
-            this.setState({ opinions: null }, () => {
-                this.getTweetInfo();
-            });
-            this.input.current?.clear();
-        } else {
-            toast(response.error.description);
-        }
     }
 
     componentDidMount(): void {
@@ -143,11 +147,11 @@ export class CreateOpinion extends React.PureComponent<Props, State> {
                 
                 <div className="modal-container">
                     <div className="all-opinion-container">
-                        {this.state.opinions !== null ? 
+                        {!this.state.loadingOpinions && this.state.opinions !== null ? 
                         this.state.opinions.map(e => <Opinion
                             post_id={this.props.post_id} {...e}
                             style={{ height: "1.4rem"}} extensive
-                        />) : <></>}
+                        />) : <div className="loading">Loading...</div>}
                     </div>
 
                     <div className="submit-row">
@@ -155,8 +159,10 @@ export class CreateOpinion extends React.PureComponent<Props, State> {
                             placeholder="Write your opinion here..."
                             type="text" legendTitle={false}
                             expand ref={this.input}
+                            maxlen={12}
+                            minlen={1}
                         />
-                        <Button text="Submit" primary width="25%" onClickAsync={this.submitOpinion} />
+                        <Button text="Submit" primary width="25%" onClickSync={this.submitOpinion} />
                     </div>
                 </div>
             </div>

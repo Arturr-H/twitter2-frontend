@@ -14,7 +14,7 @@ interface ErrorMessage {
 }
 
 export class Backend {
-    static BACKEND_URL: string = "http://localhost:8081";//"https://twitter2-backend.artur.red";
+    static BACKEND_URL: string = "https://twitter2-backend.artur.red"; //"http://localhost:8081";//
 
     /** Tries to fetch backend and convert response
      * into T, else returning ErrorMessage interface */
