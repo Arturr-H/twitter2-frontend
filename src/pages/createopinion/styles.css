@@ -12,10 +12,6 @@
 
     padding-bottom: 0.5rem;
     box-sizing: border-box;
-}.all-opinion-container > .loading {
-    color: var(--border-highlight);
-    font-family: "Epilogue", sans-serif;
-    margin-top: 2rem;
 }.all-opinion-container > button {
     height: min-content;
     display: flex;
